@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workspaceFilter version="1.0">
+    <filter root="/conf/headless-test" mode="merge"/>
+    <filter root="/content/headless-test" mode="merge"/>
+    <filter root="/content/dam/headless-test" mode="merge">
+        <exclude pattern="/content/dam/headless-test(/.*)?"/>
+        <include pattern="/content/dam/headless-test/jcr:content(/.*)?"/>
+    </filter>
+    <filter root="/content/dam/headless-test/asset.jpg" mode="merge"/>
+    <filter root="/content/experience-fragments/headless-test" mode="merge"/>
+</workspaceFilter>
