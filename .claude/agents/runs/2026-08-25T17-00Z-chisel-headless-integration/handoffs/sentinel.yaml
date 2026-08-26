@@ -1,0 +1,183 @@
+phase: test
+agent: sentinel
+run_id: 2026-08-25T17-00Z-chisel-headless-integration
+adlc_stage: post-deploy
+status: fail
+adlc_run_terminal: true
+timestamp: 2026-08-26T15:12:28Z
+
+dispatch:
+  packet: .claude/agents/runs/2026-08-25T17-00Z-chisel-headless-integration/dispatch/07-sentinel.md
+  continuation_source: .claude/agents/runs/2026-08-25T17-00Z-chisel-headless-integration/test/sentinel/SENTINEL-HANDOFF-FOR-CONTINUATION.md
+  note: >
+    This handoff closes the Sentinel stage from archived evidence. No additional Maven
+    invocation or live AEM probing was performed during the continuation, per the handoff.
+
+environment:
+  author:
+    url: https://author-p185256-e1945105.adobeaemcloud.com/
+    auth: "Authorization: Bearer $AEM_AUTHOR_BEARER_TOKEN"
+    credential_persistence: "token not persisted"
+  publish:
+    url: https://publish-p185256-e1945105.adobeaemcloud.com/
+    auth: anonymous
+
+outputs:
+  report_markdown: .claude/agents/runs/2026-08-25T17-00Z-chisel-headless-integration/test/sentinel/sentinel-report.md
+  report_html: .claude/agents/runs/2026-08-25T17-00Z-chisel-headless-integration/test/sentinel/sentinel-report.html
+  coverage_matrix: .claude/agents/runs/2026-08-25T17-00Z-chisel-headless-integration/test/sentinel/coverage-matrix.md
+  evidence_root: .claude/agents/runs/2026-08-25T17-00Z-chisel-headless-integration/test/sentinel/evidence
+
+coverage:
+  source_artifact: .claude/agents/runs/2026-08-25T17-00Z-chisel-headless-integration/design/test-cases.md
+  total_from_file: 34
+  executed: 34
+  pass: 32
+  fail: 0
+  blocked: 2
+  not_applicable: 0
+  arithmetic_check: "32 + 0 + 2 + 0 = 34"
+  blocked_cases:
+    - id: TC-012
+      cause: AUD-CONTENT-01
+      note: "content-section.sectionImage is not reachable because sections/bolt is not wired into home.sections"
+    - id: TC-016
+      cause: AUD-CONTENT-01
+      note: "sectionImageAlt is not reachable for the same wiring reason"
+
+track_verdicts:
+  headline_multiline_schema_check:
+    status: pass
+    summary: >
+      All 4 persisted queries returned HTTP 200 with zero GraphQL errors on both Author
+      and Publish. All 11 reachable multiline fields are non-null and <p>-wrapped.
+      The 12th field remains unreachable only because of AUD-CONTENT-01.
+  graphql_content_parity:
+    status: pass
+    summary: "103 fields mechanically compared against source-content-inventory r02 with 0 mismatches and 0 non-whitespace diffs."
+  authoring_provisions:
+    status: pass
+    summary: "5 CF Models enabled, endpoint configured, introspection clean, fragments and persisted queries present."
+  dam_checkpoint_p7:
+    status: pass
+    summary: "home-hero.png and home-movement.png have real Author binaries and matching Publish delivery headers."
+  delivery_surface_nfr_substitutes:
+    status: fail
+    summary: "Payload size, latency, cache headers, and error paths pass; CORS fails under SENT-CORS-01."
+  browser_rendered_tracks:
+    status: not_applicable
+    summary: "AD-1 confirmed Pure Headless: no rendered surface, no page URL, no ui.tests obligation."
+
+findings:
+  - id: SENT-CORS-01
+    severity: critical
+    class: correctness
+    status: open
+    blocking: true
+    track: delivery_surface_cors
+    summary: >
+      Any fresh Publish GET to /graphql/execute.json/headless-test/* with an Origin
+      header returns HTTP 204 No Content with zero bytes. Cache-hit requests can return
+      data but still omit access-control-allow-origin, so browser JavaScript cannot read
+      the response cross-origin.
+    evidence:
+      - .claude/agents/runs/2026-08-25T17-00Z-chisel-headless-integration/test/sentinel/evidence/publish-cors-cachebust-realorigin.headers.txt
+      - .claude/agents/runs/2026-08-25T17-00Z-chisel-headless-integration/test/sentinel/evidence/publish-cors-cachebust-localhost.headers.txt
+      - .claude/agents/runs/2026-08-25T17-00Z-chisel-headless-integration/test/sentinel/evidence/publish-cors-cachebust-noorigin.headers.txt
+      - .claude/agents/runs/2026-08-25T17-00Z-chisel-headless-integration/test/sentinel/evidence/publish-cors-summary.txt
+    supersedes_or_extends:
+      - AUD-INFO-01
+    routed_to:
+      - configsmith
+      - bridgesmith
+      - platform_cdn_owner
+    recommended_fix: >
+      Investigate Publish-tier CORS and CDN/Fastly handling for GraphQL delivery paths.
+      Ensure Origin-bearing requests return the normal GraphQL body and an
+      access-control-allow-origin value for approved consumer origins.
+
+  - id: AUD-CONTENT-01
+    severity: medium
+    class: correctness
+    status: open
+    blocking: true
+    track: content_wiring
+    summary: >
+      sections/bolt, the only carrier of home-movement.png, is authored but not wired
+      into home.sections. The asset itself is valid and delivery-resolvable, but it is
+      unreachable through landing-page-by-path.
+    blocks:
+      - TC-012
+      - TC-016
+    evidence:
+      - .claude/agents/runs/2026-08-25T17-00Z-chisel-headless-integration/test/sentinel/evidence/publish-landing-page-by-path.json
+      - .claude/agents/runs/2026-08-25T17-00Z-chisel-headless-integration/test/sentinel/evidence/frag-data-fragments-sections-bolt.json
+      - .claude/agents/runs/2026-08-25T17-00Z-chisel-headless-integration/test/sentinel/evidence/publish-home-movement-headers.txt
+    routed_to:
+      - composer
+      - program_agent
+      - human_scope_decision
+    recommended_fix: >
+      Choose whether to wire sections/bolt into home.sections, reattach home-movement.png
+      to a currently wired section, or expose the fragment through another query.
+
+  - id: GQL-SPEC-01
+    severity: low
+    class: test_spec
+    status: open
+    blocking: false
+    track: test_case_specification
+    summary: >
+      TC-024 expects landing-page-by-path to return at least 6 pillars, but the home page
+      contract intentionally returns 3 selected pillars. pillars-list returns all 6.
+    evidence:
+      - .claude/agents/runs/2026-08-25T17-00Z-chisel-headless-integration/test/sentinel/evidence/publish-landing-page-by-path.json
+      - .claude/agents/runs/2026-08-25T17-00Z-chisel-headless-integration/test/sentinel/evidence/publish-pillars-list.json
+    routed_to:
+      - designforge
+    recommended_fix: "Correct TC-024 to match the home payload contract and rely on TC-006 for the all-6 pillar census."
+
+  - id: POM-PORT-OBS
+    severity: low
+    class: local_build_config
+    status: open
+    blocking: false
+    track: local_build
+    summary: "pom.xml has <aem.port>4506</aem.port>; this is local-build-only and did not affect real-environment validation."
+    routed_to:
+      - program_agent
+      - repo_maintainer
+    recommended_fix: "Review the intended local SDK Author port in a follow-up commit."
+
+ad1_not_applicable_tracks:
+  - track: "Tier-A visual diff - desktop 1440x900"
+    status: "N/A"
+    reason: "AD-1 produces no rendered surface and neither supplied PNG is a page screenshot."
+  - track: "Tier-A visual diff - mobile 390x844"
+    status: "N/A"
+    reason: "Same as desktop: no rendered output at either viewport under AD-1."
+  - track: "Browser automation / page fetch"
+    status: "N/A"
+    reason: "AD-1 delivers no page URL; persisted GraphQL HTTP requests are the validation surface."
+  - track: "Core Web Vitals"
+    status: "N/A"
+    reason: "Unmeasurable without a rendered document; performance is measured at the persisted-query response layer."
+  - track: "Page-level accessibility scan"
+    status: "N/A"
+    reason: "No DOM exists; accessibility obligation is relocated into payload alt-text checks."
+  - track: "ui.tests Cypress-to-Playwright harness migration"
+    status: "N/A under AD-1"
+    reason: "No UI and no consumer app exist in this repo, so the harness migration is inapplicable."
+
+process_notes:
+  - "Did not re-run mvn; the mvn ledger is closed at 3 of 3."
+  - "Did not write to DECISIONS.md."
+  - "Did not persist bearer token or credential material."
+  - "Did not re-run live AEM checks during continuation; archived evidence was used as instructed."
+  - "reports/tokens.json was left unchanged."
+
+next_actor: program_agent
+recommended_program_agent_entries:
+  - "Record SENT-CORS-01 as new critical delivery blocker, superseding/extending AUD-INFO-01."
+  - "Carry AUD-CONTENT-01 forward as open, blocking TC-012 and TC-016 only."
+  - "Route GQL-SPEC-01 to Designforge as a test-spec correction."

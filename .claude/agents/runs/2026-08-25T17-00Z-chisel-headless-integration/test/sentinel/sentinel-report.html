@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sentinel Report - Chisel Headless Integration</title>
+<style>
+  :root {
+    --text: #30363d;
+    --muted: #667085;
+    --bg: #f6f8fa;
+    --card: #ffffff;
+    --border: #d8dee4;
+    --pass: #1f7a3f;
+    --pass-bg: #eaf6ee;
+    --fail: #b42318;
+    --fail-bg: #fdebea;
+    --warn: #a15c00;
+    --warn-bg: #fff4df;
+    --info: #1d5fa7;
+    --info-bg: #eaf2fb;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    line-height: 1.55;
+    color: var(--text);
+    background: var(--bg);
+  }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 28px 20px 60px; }
+  header, section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 18px;
+  }
+  .eyebrow { color: var(--muted); text-transform: uppercase; letter-spacing: .08em; font-size: 12px; font-weight: 700; }
+  h1 { margin: 6px 0 12px; font-size: 26px; line-height: 1.2; }
+  h2 { margin: 0 0 12px; font-size: 20px; }
+  h3 { margin: 18px 0 8px; font-size: 16px; }
+  .meta { display: flex; flex-wrap: wrap; gap: 8px 24px; color: var(--muted); font-size: 13px; margin-top: 14px; }
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 999px;
+    padding: 6px 14px;
+    font-weight: 800;
+    border: 1px solid;
+  }
+  .pill.fail, .badge.fail { color: var(--fail); background: var(--fail-bg); border-color: var(--fail); }
+  .badge.pass { color: var(--pass); background: var(--pass-bg); }
+  .badge.warn { color: var(--warn); background: var(--warn-bg); }
+  .badge.info { color: var(--info); background: var(--info-bg); }
+  .badge {
+    display: inline-block;
+    border-radius: 6px;
+    padding: 3px 8px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 14px; }
+  th, td { border: 1px solid var(--border); padding: 8px 10px; vertical-align: top; text-align: left; }
+  th { background: #f0f3f6; }
+  tbody tr:nth-child(even) td { background: #fafbfc; }
+  code {
+    background: #eef1f4;
+    border: 1px solid #d8dee4;
+    border-radius: 4px;
+    padding: 1px 5px;
+    font-family: "Cascadia Code", Consolas, monospace;
+    font-size: 12.5px;
+  }
+  .callout {
+    border-left: 5px solid var(--fail);
+    background: var(--fail-bg);
+    border-radius: 8px;
+    padding: 12px 14px;
+    margin: 14px 0;
+  }
+  .finding {
+    border: 1px solid var(--border);
+    border-left: 5px solid var(--warn);
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin: 14px 0;
+  }
+  .finding.critical { border-left-color: var(--fail); }
+  ul { padding-left: 22px; }
+  footer { color: var(--muted); text-align: center; font-size: 12px; padding-top: 10px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">sentinel - Test (post-deploy)</div>
+    <h1>Sentinel Report - Chisel Headless Integration</h1>
+    <span class="pill fail">FAIL</span>
+    <div class="meta">
+      <span><strong>Run</strong> 2026-08-25T17-00Z-chisel-headless-integration</span>
+      <span><strong>Generated</strong> 2026-08-26T15:12:28Z</span>
+      <span><strong>Source</strong> sentinel-report.md</span>
+    </div>
+  </header>
+
+  <section>
+    <h2>Verdict</h2>
+    <div class="callout">
+      Terminal status is <code>fail</code>. The primary GraphQL delivery contract passed, but one new critical CORS delivery defect and one carried-forward content wiring blocker remain open.
+    </div>
+    <p>All 4 persisted queries returned HTTP 200 with no GraphQL errors on both real tiers. The multiline rich-text fix and the <code>landing-page.hero</code> schema fix survived FileVault deployment. Publish content parity passed for all reachable payloads, Author provisioning passed, and both DAM binaries are present and delivery-resolvable.</p>
+  </section>
+
+  <section>
+    <h2>Coverage Summary</h2>
+    <table>
+      <thead><tr><th>Metric</th><th>Count</th></tr></thead>
+      <tbody>
+        <tr><td><code>total_from_file</code></td><td>34</td></tr>
+        <tr><td><code>executed</code></td><td>34</td></tr>
+        <tr><td><code>pass</code></td><td>32</td></tr>
+        <tr><td><code>fail</code></td><td>0</td></tr>
+        <tr><td><code>blocked</code></td><td>2</td></tr>
+        <tr><td><code>not_applicable</code></td><td>0</td></tr>
+      </tbody>
+    </table>
+    <p>Arithmetic check: <code>32 + 0 + 2 + 0 = 34</code>. See <code>coverage-matrix.md</code> for per-ID evidence.</p>
+  </section>
+
+  <section>
+    <h2>Track Summary</h2>
+    <table>
+      <thead><tr><th>Track</th><th>Verdict</th><th>Evidence</th></tr></thead>
+      <tbody>
+        <tr><td>Headline multiline/schema check</td><td><span class="badge pass">PASS</span></td><td><code>author-*.json</code>, <code>publish-*.json</code>, <code>author-landing-page-model-full.json</code></td></tr>
+        <tr><td>GraphQL content parity</td><td><span class="badge pass">PASS</span></td><td><code>publish-landing-page-by-path.json</code>, <code>publish-hero-by-path.json</code>, <code>publish-stats-list.json</code>, <code>publish-pillars-list.json</code></td></tr>
+        <tr><td>Authoring provisions</td><td><span class="badge pass">PASS</span></td><td><code>author-model-*.json</code>, <code>author-introspection.json</code>, <code>author-fragfolder-*.json</code></td></tr>
+        <tr><td>P7 DAM checkpoint</td><td><span class="badge pass">PASS</span></td><td><code>author-home-*-jcrcontent-full.json</code>, <code>publish-home-*-headers.txt</code></td></tr>
+        <tr><td>Delivery NFR substitutes</td><td><span class="badge fail">FAIL</span></td><td>Latency, payload, cache, and error paths pass; CORS fails.</td></tr>
+        <tr><td>Browser-rendered tracks</td><td><span class="badge info">N/A</span></td><td>AD-1 confirmed Pure Headless: no rendered surface.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Findings And Routing</h2>
+    <table>
+      <thead><tr><th>ID</th><th>Severity</th><th>Finding</th><th>Disposition</th><th>Route</th></tr></thead>
+      <tbody>
+        <tr><td><code>SENT-CORS-01</code></td><td>critical</td><td>Publish GraphQL requests with any <code>Origin</code> header return HTTP 204 with no body on cache miss; cache hits omit <code>access-control-allow-origin</code>.</td><td>open, blocking</td><td><code>configsmith</code>, <code>bridgesmith</code>, platform/CDN owner</td></tr>
+        <tr><td><code>AUD-CONTENT-01</code></td><td>medium</td><td><code>sections/bolt</code>, the only carrier of <code>home-movement.png</code>, is not wired into <code>home.sections</code>.</td><td>open, blocking TC-012/TC-016</td><td><code>composer</code>, Program Agent / human scope decision</td></tr>
+        <tr><td><code>GQL-SPEC-01</code></td><td>low</td><td>TC-024 expects 6 pillars in <code>landing-page-by-path</code>, but the home payload intentionally returns 3; <code>pillars-list</code> returns all 6.</td><td>open, spec correction</td><td><code>designforge</code></td></tr>
+        <tr><td><code>POM-PORT-OBS</code></td><td>low/info</td><td><code>pom.xml</code> has <code>&lt;aem.port&gt;4506&lt;/aem.port&gt;</code>; local-build-only, no real-env effect.</td><td>open, non-blocking</td><td>Program Agent / repo maintainer</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Key Passes</h2>
+    <ul>
+      <li>All 4 persisted queries passed on Author and Publish: <code>landing-page-by-path</code>, <code>hero-by-path</code>, <code>stats-list</code>, <code>pillars-list</code>.</li>
+      <li>All 11 reachable multiline fields are non-null and <code>&lt;p&gt;...&lt;/p&gt;</code> wrapped on both tiers.</li>
+      <li><code>GQL-FIX-01</code> survived deployment: <code>landing-page.hero</code> is <code>string/reference</code>.</li>
+      <li>Publish parity: 103 fields mechanically compared, 0 mismatches, 0 non-whitespace diffs.</li>
+      <li>Authoring provisions: 5 enabled CF Models, 5 model types in introspection, correct endpoint, 4 binary persisted-query nodes.</li>
+      <li>DAM: <code>home-hero.png</code> 1600x992 / 802956 bytes and <code>home-movement.png</code> 1080x1341 / 1661220 bytes are delivery-resolvable.</li>
+      <li>Non-CORS delivery NFRs pass: payloads below 150 KB, p75 about 177 ms, cache headers present, error paths return GraphQL errors rather than 500s.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Detailed Blockers</h2>
+    <div class="finding critical">
+      <h3>SENT-CORS-01 - Critical - Open</h3>
+      <p>Any fresh GET to <code>/graphql/execute.json/headless-test/*</code> on Publish that carries an <code>Origin</code> header returns <code>HTTP 204 No Content</code> with zero bytes. This reproduces for arbitrary third-party origins and for <code>http://localhost:3000</code>. Cache-hit requests can return data, but still omit <code>access-control-allow-origin</code>, so browser JavaScript cannot read the response cross-origin.</p>
+      <p>Evidence: <code>publish-cors-cachebust-realorigin.headers.txt</code>, <code>publish-cors-cachebust-localhost.headers.txt</code>, <code>publish-cors-cachebust-noorigin.headers.txt</code>, <code>publish-cors-summary.txt</code>.</p>
+    </div>
+    <div class="finding">
+      <h3>AUD-CONTENT-01 - Medium - Open</h3>
+      <p><code>sections/bolt</code> is authored and <code>home-movement.png</code> is a valid delivered asset, but the fragment is not referenced by <code>home.sections</code>. TC-012 and TC-016 remain blocked until a human/product decision wires the fragment, reattaches the image, or exposes it through another query.</p>
+      <p>Evidence: <code>publish-landing-page-by-path.json</code>, <code>frag-data-fragments-sections-bolt.json</code>, <code>publish-home-movement-headers.txt</code>.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2>AD-1 Per-Track N/A</h2>
+    <table>
+      <thead><tr><th>Track</th><th>Status</th><th>Reason</th></tr></thead>
+      <tbody>
+        <tr><td>Tier-A visual diff - desktop 1440x900</td><td>N/A</td><td>No rendered surface and no page screenshot reference under AD-1.</td></tr>
+        <tr><td>Tier-A visual diff - mobile 390x844</td><td>N/A</td><td>Same as desktop: no rendered output at either viewport.</td></tr>
+        <tr><td>Browser automation / page fetch</td><td>N/A</td><td>No page URL; the HTTP surface is the GraphQL persisted-query endpoint.</td></tr>
+        <tr><td>Core Web Vitals</td><td>N/A</td><td>Unmeasurable without a rendered document; performance is measured at the persisted-query response layer.</td></tr>
+        <tr><td>Page-level accessibility scan</td><td>N/A</td><td>No DOM exists; accessibility obligation is relocated to payload alt-text checks.</td></tr>
+        <tr><td><code>ui.tests</code> Cypress-to-Playwright migration</td><td>N/A under AD-1</td><td>No UI and no consumer app in this repo, so the harness migration is inapplicable.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <footer>Generated by the ADLC sentinel continuation; canonical source: sentinel-report.md</footer>
+</div>
+</body>
+</html>
