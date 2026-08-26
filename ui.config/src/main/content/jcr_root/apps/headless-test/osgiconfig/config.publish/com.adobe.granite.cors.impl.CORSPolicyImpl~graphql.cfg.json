@@ -1,0 +1,24 @@
+{
+  "alloworigin": [
+    "http://localhost:3000"
+  ],
+  "alloworiginregexp": [],
+  "allowedpaths": [
+    "/graphql/execute.json/headless-test/.*",
+    "/content/_cq_graphql/headless-test/.*"
+  ],
+  "allowedheaders": [
+    "Origin",
+    "Accept",
+    "X-Requested-With",
+    "Content-Type",
+    "Access-Control-Request-Method",
+    "Access-Control-Request-Headers"
+  ],
+  "allowedmethods": [
+    "GET",
+    "HEAD"
+  ],
+  "maxage": "{Long}1800",
+  "supportscredentials": false
+}

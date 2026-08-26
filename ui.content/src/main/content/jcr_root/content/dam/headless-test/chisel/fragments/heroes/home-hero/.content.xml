@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    xmlns:dam="http://www.day.com/dam/1.0"
+    xmlns:cq="http://www.day.com/jcr/cq/1.0"
+    jcr:primaryType="dam:Asset">
+    <jcr:content
+        jcr:primaryType="dam:AssetContent"
+        jcr:title="Home Hero"
+        contentFragment="{Boolean}true">
+        <data
+            jcr:primaryType="nt:unstructured"
+            cq:model="/conf/headless-test/settings/dam/cfm/models/hero">
+            <master
+                jcr:primaryType="nt:unstructured"
+                title="Sharper tools for the trades."
+                eyebrow="Built in the trades, for the trades"
+                summary="&lt;p&gt;We invest in trades businesses, build the free software that runs them, and reinvest in the people behind the work.&lt;/p&gt;"
+                heroImage="/content/dam/headless-test/chisel/home-hero.png"
+                heroImageAlt="A tradesman in a work jacket and cap examining power tools on a workbench beside his service truck at sunset."/>
+        </data>
+        <metadata jcr:primaryType="nt:unstructured"/>
+    </jcr:content>
+</jcr:root>

@@ -1,0 +1,17 @@
+query HeroByPath($path: String!) {
+  heroByPath(_path: $path) {
+    item {
+      title
+      eyebrow
+      summary { html }
+      heroImage {
+        ... on ImageRef { _path width height }
+        ... on DocumentRef { _path }
+      }
+      heroImageAlt
+      ctaLabel
+      ctaPath
+      _path
+    }
+  }
+}

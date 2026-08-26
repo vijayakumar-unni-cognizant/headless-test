@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    xmlns:dam="http://www.day.com/dam/1.0"
+    xmlns:cq="http://www.day.com/jcr/cq/1.0"
+    jcr:primaryType="dam:Asset">
+    <jcr:content
+        jcr:primaryType="dam:AssetContent"
+        jcr:title="Home"
+        contentFragment="{Boolean}true">
+        <data
+            jcr:primaryType="nt:unstructured"
+            cq:model="/conf/headless-test/settings/dam/cfm/models/landing-page">
+            <master
+                jcr:primaryType="nt:unstructured"
+                slug="home"
+                seoTitle="Chisel — Sharper tools for the trades. Built in the trades."
+                seoDescription="&lt;p&gt;Free, AI-native operating systems for the skilled trades that run the business for the owner — instead of making the owner run the software.&lt;/p&gt;"
+                hero="/content/dam/headless-test/chisel/fragments/heroes/home-hero"
+                stats="[/content/dam/headless-test/chisel/fragments/stats/free-pricing,/content/dam/headless-test/chisel/fragments/stats/annual-savings,/content/dam/headless-test/chisel/fragments/stats/back-office-time]"
+                sections="[/content/dam/headless-test/chisel/fragments/sections/invest-in-businesses,/content/dam/headless-test/chisel/fragments/sections/runs-the-business,/content/dam/headless-test/chisel/fragments/sections/people-of-the-trades]"
+                pillars="[/content/dam/headless-test/chisel/fragments/pillars/capital,/content/dam/headless-test/chisel/fragments/pillars/technology,/content/dam/headless-test/chisel/fragments/pillars/community]"/>
+        </data>
+        <metadata jcr:primaryType="nt:unstructured"/>
+    </jcr:content>
+</jcr:root>

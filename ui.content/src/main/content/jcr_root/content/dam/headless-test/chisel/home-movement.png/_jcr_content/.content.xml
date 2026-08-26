@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    xmlns:dam="http://www.day.com/dam/1.0"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:tiff="http://ns.adobe.com/tiff/1.0/"
+    jcr:primaryType="dam:AssetContent"
+    jcr:title="home-movement.png">
+    <metadata
+        jcr:primaryType="nt:unstructured"
+        dc:title="Experienced electrician mentoring an apprentice at a residential panel"
+        dc:format="image/png"
+        tiff:ImageWidth="{Long}1080"
+        tiff:ImageLength="{Long}1341"/>
+</jcr:root>

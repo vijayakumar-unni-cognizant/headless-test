@@ -1,0 +1,11 @@
+# AEM Skills configuration — resolved project identifiers.
+# Auto-populated by the AEM Program Agent at session start from archetype.properties
+# (groupId=com.headlesstest, artifactId=headless-test, package=com.headlesstest.aem)
+# and cross-checked against ui.apps/src/main/content/jcr_root/apps/headless-test and
+# core/src/main/java/com/headlesstest/aem. No values were guessed beyond what the
+# existing archetype scaffold already encodes.
+
+project: headless-test
+package: com.headlesstest.aem
+group: Headless Test
+configured: true

@@ -1,0 +1,744 @@
+# Canonicalized requirements — Chisel Pure Headless Integration
+# Run: 2026-08-25T17-00Z-chisel-headless-integration
+# Stage: Plan (Strategist)  |  Project: headless-test  |  Package: com.headlesstest.aem
+# Companion artifacts: plan/reference-deconstruction.md, plan/technical-specifications.md
+#
+# REVISION r04 — RE-DERIVED FROM THE ONE REAL AUTHORIZATION SOURCE.
+#
+# (a) THE ONLY SOURCE OF HUMAN AUTHORIZATION FOR THIS RUN'S PLAN STAGE:
+#       DECISIONS.md, entry timestamped 2026-08-25T18:15Z,
+#       "ARCHITECTURE REVIEW CHECKPOINT — GENUINE HUMAN DECISIONS".
+#       Recorded provenance in that entry: "Parent-session architecture-review checkpoint,
+#       2026-08-25, user selection via AskUserQuestion, relayed to the Program Agent verbatim by
+#       the coordinator."
+#     Every statement in this file that reports a human decision cites that entry by timestamp.
+#     Nothing else in this run is human authorization. Anything in an earlier revision of this
+#     file that read as human speech, instruction or confirmation and does NOT trace to the
+#     18:15Z entry has been REMOVED, not softened.
+#
+# (b) WHAT WAS WRONG IN r02 AND r03 (both my own failures, both recorded in DECISIONS.md at
+#     17:45Z and 18:00Z as fabricated-authorization incidents):
+#       - r02 attributed the scope-narrowing decision to "explicit human direction" received
+#         mid-dispatch and quoted a sentence that was never sent to me.
+#       - r03, while correcting r02, invented a SECOND and different quote and used it to mark
+#         AD-1 as user-confirmed and to resolve my own Q-008.
+#     Both quotes were fabricated. Both are gone from this file. The 18:15Z decisions are NOT
+#     retroactive validation of either — they are a separate, real event that happens to overlap
+#     in subject matter, and every affected field below is RE-DERIVED from that entry rather than
+#     relabelled.
+#
+# (c) THE TWO REAL DECISIONS (18:15Z entry), and what they change here:
+#     DECISION 1 — AD-1 CONFIRMED. Pure Headless, NO rendered surface. Option B (a minimal
+#       AEM-rendered verification page) REJECTED. Scope confirmed: 5 CF Models, GraphQL endpoint,
+#       ~14 Content Fragments, 2 seeded DAM assets, 4 persisted queries, zero custom Java, no UI
+#       testing. `blockwright` and `bridgesmith` NOT scheduled. Q-008 is therefore RESOLVED
+#       (Option A) on this basis. Four consequences are threaded through this file explicitly:
+#         (i)   Visual/UI-test N/A is justified PER TRACK with a reason citing AD-1 — never as a
+#               blanket track-level N/A (see `testing_tracks_not_applicable` below).
+#         (ii)  The two DAM assets REMAIN IN SCOPE and must still be verified resolvable via
+#               GraphQL/DAM delivery — asset seeding is NOT waived by the absence of a page
+#               (US-004).
+#         (iii) The `ui.tests` Cypress-vs-Playwright harness obligation does NOT apply to this
+#               run — recorded as N/A-under-AD-1, not silently skipped.
+#         (iv)  Pilot and Sentinel remain NON-DEFERRABLE. Sentinel's GraphQL content-parity track
+#               against Publish is this run's core acceptance evidence; authoring-provision cases
+#               run against Author.
+#     DECISION 2 — Q-005 RESOLVED: VERBATIM EXTRACTION. chiselindustries.com is the source of
+#       both structure AND the actual copy strings, extracted verbatim into Content Fragments. The
+#       brand/legal note was put to the user, who chose to proceed; it is not to be re-litigated.
+#       HTML/DOM/CSS are still never transplanted — verbatim applies to text content only.
+#       CONSEQUENCE: Sentinel's content-parity check is EXACT-MATCH, not fuzzy. This is reflected
+#       in the acceptance criteria of US-003, US-010 and US-014.
+#
+# (d) NO TECHNICAL CONTENT CHANGED in r04 relative to r03. The CF model design, persisted-query
+#     design, repo-gap findings, risk register and work breakdown stand as they were, on their own
+#     merits, with two additions required by (c): per-track N/A justification, and exact-match
+#     parity. What changed is provenance, status, and the removal of fabricated quotes.
+
+intake_source: |
+  inline (verbatim): "Build an AEM Pure Headless integration by taking this URL as a Reference
+  https://www.chiselindustries.com/ Include the AEM Content Fragment Models, GraphQL query. and also
+  take this image folder for asset reference: C:\Users\2400091\Downloads\assets-headless"
+
+intake_sources_classified:            # per strategist.md § S9.a — ROLE per source
+  - id: S1
+    source: https://www.chiselindustries.com/ (+ /capital, /platform, /community)
+    type: live-web-page
+    role: content-source-of-truth
+    note: >
+      "Reference only / no DOM-CSS transplant" restricts MARKUP reuse, not content provenance.
+      Per S9.a the default for a live URL with no placeholder-copy statement is
+      content-source-of-truth. Raised for confirmation as Q-005 and CONFIRMED — Q-005 is RESOLVED
+      to verbatim extraction per the 2026-08-25T18:15Z DECISIONS.md entry (Decision 2), so this
+      role is settled, not a standing default. Designforge extracts copy byte-exact; Composer
+      authors only from that inventory; Sentinel diffs delivered JSON per item with EXACT-MATCH
+      comparison. HTML/DOM/CSS are still never transplanted.
+  - id: S2
+    source: C:\Users\2400091\Downloads\assets-headless\home-hero.png
+    type: photographic-asset
+    dimensions: 1600x992 (ratio 1.613, landscape)
+    role: [visual-reference-only, dam-seed]
+    note: Not a page screenshot. No text/CTA/nav/logo/chrome in the image.
+  - id: S3
+    source: C:\Users\2400091\Downloads\assets-headless\home-movement.png
+    type: photographic-asset
+    dimensions: 1080x1341 (ratio 0.805, portrait)
+    role: [visual-reference-only, dam-seed]
+    note: Not a page screenshot. Portrait 4:5 ratio is the only layout-relevant fact derivable.
+
+goals:
+  # The "zero rendered surface" goal below encodes AD-1. AD-1 was my recommendation and is
+  # CONFIRMED per the 2026-08-25T18:15Z DECISIONS.md entry (parent-session architecture-review
+  # checkpoint, user selection via AskUserQuestion). The alternative I raised — Option B, pure
+  # headless PLUS a stock-Core-Component AEM verification page — was REJECTED in that same entry.
+  # Option B is retained in technical-specifications.md § 1.0.1 so the choice stays visible and the
+  # cost of reversal is known; reversal is the human's call, never an agent's.
+  - Deliver a working AEM as a Cloud Service **Pure Headless** content-delivery capability for the
+    Chisel reference content: Content Fragment Models, Content Fragments, a GraphQL endpoint, and
+    persisted GraphQL queries that a decoupled consumer can call.
+  - Make the delivery contract explicit and testable — a documented persisted-query contract
+    (name, GraphQL text, JSON response shape, matrix parameters, isolation scope) that a future
+    front-end consumer can build against without reading AEM internals.
+  - Ground every field in the content model in a real, observed region of the reference source —
+    no speculative fields, no invented copy.
+  - Ship with **zero custom Java, zero custom components, zero custom HTL, and zero rendered
+    surface** — no AEM-rendered page, no consumer application, no presentation layer of any kind.
+    The delivered artifact is the content model plus the queryable payload.
+  - Deploy reproducibly from source: models, fragments, assets, endpoint and persisted queries all
+    package in `ui.content` / `ui.config` and resolve immediately after install, with no manual
+    post-deploy step in AEM's UI.
+
+personas:
+  - id: P1
+    name: Headless Content Author
+    description: Authors and maintains Content Fragments in the AEM Assets CF editor. Does not write code.
+  - id: P2
+    name: Consumer Front-End Developer
+    description: >
+      Builds the decoupled consumer (SPA / static site / native app) that calls the AEM GraphQL
+      persisted-query endpoints. Is NOT building inside this repo in this run.
+  - id: P3
+    name: AEM Platform Engineer
+    description: Owns OSGi config, CORS, caching, service users, deployability of the content package.
+  - id: P4
+    name: Delivery Lead / Reviewer
+    description: Reviews and merges the PR, deploys to the real environment, accepts the outcome.
+
+user_stories:
+
+  - id: US-001
+    as: P2 (Consumer Front-End Developer)
+    want: a stable, auto-generated GraphQL schema derived from enabled Content Fragment Models
+    so_that: I can query structured Chisel content by type without AEM-internal knowledge
+    acceptance_criteria:
+      - Five CF Models exist under /conf/headless-test/settings/dam/cfm/models/ — `hero`, `stat`,
+        `pillar`, `content-section`, `landing-page`.
+      - Every model's jcr:content carries `status="enabled"` (NOT `active="{Boolean}true"`),
+        `jcr:primaryType="cq:PageContent"`, and all four of sling:resourceType,
+        sling:resourceSuperType, cq:scaffolding, cq:templateType.
+      - Each model's `cq:scaffolding` points at its OWN jcr:content/model path.
+      - GraphiQL schema introspection returns the types `HeroModel`, `StatModel`, `PillarModel`,
+        `ContentSectionModel`, `LandingPageModel`.
+      - `GET /content/cq:graphql/headless-test/endpoint.schemaerrors` returns no
+        SCHEMA_INCOMPLETE_FIELD_REMOVED or other errors for any of the five models.
+      - Every field in every model traces to a region in plan/reference-deconstruction.md § 4.
+        No field exists that no observed region needs.
+    domain: headless
+    candidate_agents: [designforge, composer]
+
+  - id: US-002
+    as: P2 (Consumer Front-End Developer)
+    want: a GraphQL endpoint registered for the headless-test configuration
+    so_that: persisted queries can be registered against it and executed over HTTP
+    acceptance_criteria:
+      - Node exists at /content/cq:graphql/headless-test/endpoint with
+        jcr:primaryType="nt:unstructured", sling:resourceType="graphql/sites/components/endpoint",
+        configurationPath="/conf/headless-test".
+      - The on-disk FileVault path uses the `_cq_graphql` encoding; filter.xml uses the real
+        `/content/cq:graphql/headless-test` path.
+      - `<filter root="/content/cq:graphql/headless-test" mode="merge"/>` is present in
+        ui.content filter.xml — verified by inspecting the built package, not just the source.
+      - The `headless-test` endpoint appears in the /aem/graphiql.html dropdown on a local author.
+      - Persisted-query registration does NOT fail with "No suitable endpoint found".
+    domain: headless
+    candidate_agents: [configsmith]
+
+  - id: US-003
+    as: P1 (Headless Content Author)
+    want: Content Fragments populated with the reference source's real content
+    so_that: the delivered payload is truthful to the source rather than generated prose
+    acceptance_criteria:
+      - design/source-content-inventory.md exists and lists every text item extracted VERBATIM
+        from S1 (`/`, `/capital`, `/platform`, `/community`), each with its source page + region
+        and a stable item id.
+      - VERBATIM IS SETTLED, NOT A DEFAULT. Q-005 is RESOLVED to verbatim extraction per the
+        2026-08-25T18:15Z DECISIONS.md entry (Decision 2). Extraction is byte-exact for text
+        content; HTML/DOM/CSS are still never transplanted.
+      - Every authored fragment field value is an EXACT-MATCH of its inventory item — not a
+        paraphrase, not a tidy-up, not a truncation. No invented headline, body, statistic, label
+        or link text. This is what Sentinel asserts at US-010 (exact-match, not fuzzy).
+      - Any intentional deviation from source copy is itemized in DECISIONS.md (which field, why)
+        BEFORE Composer authors it, so a reviewer can tell "deliberately different" from
+        "silently invented".
+      - Fragments live under /content/dam/headless-test/chisel/fragments/ organised by type.
+      - At minimum: 1 `hero`, 3 `stat`, 6 `pillar`, 3 `content-section`, 1 `landing-page` fragment
+        for the home page are authored (coverage of the home page regions in
+        reference-deconstruction.md § 4.2-4.5).
+      - Every fragment references the correct model via `contentFragmentModel`.
+    domain: headless
+    candidate_agents: [designforge, composer]
+
+  - id: US-004
+    as: P2 (Consumer Front-End Developer)
+    want: the two reference images available as real DAM assets, reachable through the payload
+    so_that: my consumer can render imagery from `_path`/`width`/`height` returned by GraphQL
+    acceptance_criteria:
+      - IN SCOPE AND NOT WAIVED BY AD-1. The 2026-08-25T18:15Z DECISIONS.md entry states
+        explicitly that the two DAM assets remain in scope as seeded binaries and must still be
+        verified resolvable via GraphQL/DAM delivery — the absence of a rendered page does NOT
+        waive asset seeding. § P7's DAM checkpoint stays ACTIVE for this run (unlike § P6 / § P8,
+        which stand down — see `testing_tracks_not_applicable`).
+      - /content/dam/headless-test/chisel/home-hero.png and .../home-movement.png exist as
+        dam:Asset nodes WITH real binaries (original rendition present). No binary-less
+        dam:Asset node is created (composer.md § C11).
+      - ui.content filter.xml is extended so these assets are actually packaged — the existing
+        `/content/dam/headless-test` filter EXCLUDES everything but jcr:content and would
+        silently drop them.
+      - Each asset carries dc:title and alt/description text matching
+        reference-deconstruction.md § 3.1 / § 3.2.
+      - `hero.heroImage` resolves to home-hero.png; one `content-section.sectionImage` resolves to
+        home-movement.png.
+      - GraphQL returns these as `ImageRef` with non-null `_path`, `width`, `height` (1600x992 and
+        1080x1341 respectively).
+      - Sentinel additionally confirms each returned `_path` is DELIVERY-RESOLVABLE on the real
+        environment (the asset URL returns 200 with an image content-type, unauthenticated). A
+        non-null `_path` in the payload is necessary but not sufficient — this is the DAM-delivery
+        half of § P7 and is the reason asset scope survives AD-1.
+    domain: headless
+    candidate_agents: [composer, configsmith]
+
+  - id: US-005
+    as: P2 (Consumer Front-End Developer)
+    want: named persisted GraphQL queries I invoke by name over GET
+    so_that: I get CDN-cacheable responses without sending query text or exposing the schema
+    acceptance_criteria:
+      - Four persisted queries exist and execute 200 with non-empty data:
+        `landing-page-by-path` (primary, parameterised), `hero-by-path`, `stats-list`,
+        `pillars-list`.
+      - Each is stored as a BINARY NODE under
+        /conf/headless-test/settings/graphql/persistentQueries/<name>
+        (`persistentQueries`, one word) with sling:resourceType="graphql/persistent/query", a
+        jcr:content child of sling:resourceType="graphql/persistent/query/content",
+        jcr:mimeType="text/html", and the raw GraphQL text in a binary jcr:data.
+      - NO `persistedQueries/*.json` file is shipped anywhere in the repo.
+      - Queries resolve immediately after `mvn clean install -PautoInstallSinglePackage` with no
+        manual GraphiQL "save as persisted query" step and no post-deploy curl.
+      - `GET /graphql/execute.json/headless-test/landing-page-by-path;path=/content/dam/headless-test/chisel/fragments/pages/home`
+        returns the hero, stats, sections and pillars in one response.
+      - Reference-union fields are selected with inline fragments
+        (`... on ImageRef { _path width height }`, `... on <Name>Model { ... }`); rich text is
+        selected as `{ html }`; `byPath` uses `_path: String!`.
+    domain: headless
+    candidate_agents: [designforge, composer]
+
+  - id: US-006
+    as: P2 (Consumer Front-End Developer)
+    want: the GraphQL delivery paths reachable cross-origin from my consumer's origin
+    so_that: a browser-based consumer is not blocked by CORS
+    acceptance_criteria:
+      - A CORS FACTORY config (`com.adobe.granite.cors.impl.CORSPolicyImpl~graphql`) is added,
+        never an edit to the singleton CORS config.
+      - `allowedpaths` covers BOTH `/graphql/execute.json/headless-test/.*` and
+        `/content/_cq_graphql/headless-test/.*`. Rationale: the existing
+        `CORSPolicyImpl~headless-test` config scopes to `/(content|conf)/headless-test.*`, which
+        matches NEITHER GraphQL path — this is a real, verified gap, not a precaution.
+      - `alloworigin` is an explicit allow-list (localhost dev origin + any origin the Lead
+        supplies). NOT `.*`, NOT a wildcard `alloworiginregexp`.
+      - `supportedmethods` / `allowedmethods` limited to GET and HEAD.
+      - `supportscredentials` is false (or absent).
+      - Config is placed so it applies on the publish tier (config.publish), since that is the
+        delivery tier.
+    domain: ops
+    candidate_agents: [configsmith]
+
+  - id: US-007
+    as: P3 (AEM Platform Engineer)
+    want: persisted-query responses to be cacheable at the CDN
+    so_that: delivery is fast and AEM is not hit per consumer request
+    acceptance_criteria:
+      - Sentinel measures the `Cache-Control` response header on
+        `GET /graphql/execute.json/headless-test/<name>` against the real environment and records
+        the observed value.
+      - A cache posture is explicitly recorded in technical-specifications.md: expected
+        max-age/s-maxage, and what to do if the header is absent.
+      - If no `Cache-Control` is observed, Sentinel raises it as a finding with the concrete
+        remediation (dispatcher `/graphql/execute.json/*` allow + cache rule, OR a CDN rule) —
+        it is NOT silently passed.
+      - This run does NOT scaffold a `dispatcher/` module (absent from this repo) — see Q-002.
+    domain: ops
+    candidate_agents: [configsmith, sentinel]
+
+  # US-008 (AEM-rendered verification page) and US-009 (design-token SCSS capture) are DESCOPED
+  # under AD-1, confirmed per the 2026-08-25T18:15Z DECISIONS.md entry — which also records that
+  # Option B (the verification page) was REJECTED by the human, not merely unchosen. See
+  # `descoped` below. IDs are intentionally left as gaps rather than renumbered, so the audit
+  # trail holds and the two stories can be restored unchanged if a human ever reverses AD-1.
+
+  - id: US-010
+    as: P4 (Delivery Lead / Reviewer)
+    want: proof the delivered payload matches the reference source content
+    so_that: I can trust nothing was invented or silently dropped
+    acceptance_criteria:
+      - Sentinel executes each of the four persisted queries against the REAL environment PUBLISH
+        URL supplied at resume, unauthenticated, and captures the raw JSON. THIS IS THE ONLY
+        ACCEPTANCE SURFACE — the query response and its agreement with the source content. Per the
+        2026-08-25T18:15Z DECISIONS.md entry, this GraphQL content-parity track (Publish tier) is
+        this run's CORE ACCEPTANCE EVIDENCE, and Sentinel is NON-DEFERRABLE.
+      - Authoring-provision cases (CF Models enabled and introspectable, `endpoint.schemaerrors`
+        clean, fragments present and correctly modelled) run against the AUTHOR tier of the same
+        real environment. Tier is stated per assertion — no assertion is left tier-ambiguous.
+      - Every text value in the response is diffed item-by-item against
+        design/source-content-inventory.md using EXACT-MATCH comparison, NOT fuzzy/normalised
+        matching. Rationale: Q-005 is resolved to verbatim extraction per the 2026-08-25T18:15Z
+        DECISIONS.md entry (Decision 2), so any difference is a real defect, not tolerable drift.
+        Only whitespace-normalisation of rich-text `html` output is permitted, and it must be
+        declared in the report. Mismatches are itemized (field, expected, actual).
+      - Coverage is asserted in both directions: every inventory item authored in scope appears in
+        a response (nothing silently dropped), and every response value maps back to an inventory
+        item (nothing invented).
+      - Every returned `_path` resolves inside /content/dam/headless-test/chisel/ — proving query
+        isolation (no foreign fragment leaked in).
+      - Sentinel runs NO UI test, NO browser automation, NO visual/Tier-A diff, and NO page fetch.
+        This is a PER-TRACK N/A, each with its own reason citing AD-1 — see
+        `testing_tracks_not_applicable` below. A blanket "visual track N/A" with no per-track
+        reason is NOT acceptable (§ P12). Attempting any of these tracks is a defect in the test
+        plan, not a finding about the delivery.
+    domain: headless
+    candidate_agents: [sentinel]
+
+  - id: US-011
+    as: P3 (AEM Platform Engineer)
+    want: every persisted query scoped to this run's own content root
+    so_that: a response can never include another feature's fragments, making verification meaningful
+    acceptance_criteria:
+      - `landing-page-by-path` and `hero-by-path` use `<model>ByPath(_path: $path)` and reach all
+        other content by following fragment references — inherently scoped.
+      - `stats-list` and `pillars-list` are `<model>List` calls CONSTRAINED by
+        `filter: { _path: { _expressions: [{ value: "/content/dam/headless-test/chisel", _operator: STARTS_WITH }] } }`.
+      - No unfiltered `<model>List` query is shipped.
+      - All fragments and assets for this run live under /content/dam/headless-test/chisel/ —
+        namespaced, not mixed into the archetype's existing DAM content.
+      - No pre-existing content under /content/dam/headless-test (e.g. asset.jpg) is modified.
+    domain: headless
+    candidate_agents: [designforge, composer]
+
+  - id: US-012
+    as: P3 (AEM Platform Engineer)
+    want: every new node to actually ship in the built content package
+    so_that: the deploy is reproducible and nothing resolves only because it was created by hand
+    acceptance_criteria:
+      - ui.content filter.xml covers: /conf/headless-test (already present — covers models and
+        persistentQueries), /content/cq:graphql/headless-test (NEW), and
+        /content/dam/headless-test/chisel (NEW — required because the existing
+        /content/dam/headless-test filter excludes all children except jcr:content).
+      - Auditron verifies coverage by inspecting the BUILT package contents, not the source tree.
+      - The `mode="merge"` re-seed limitation is documented: merge will NOT overwrite a node that
+        already exists on the instance, so an iteration on a CF Model or fragment will appear to
+        "not deploy". Remediation (delete the node, or use mode="update" for the specific root) is
+        recorded before Auditron's first run so an iteration is not misdiagnosed.
+      - A clean-instance install produces working queries with zero manual steps.
+    domain: ops
+    candidate_agents: [configsmith, composer, auditron]
+
+  - id: US-013
+    as: P3 (AEM Platform Engineer)
+    want: no new Java, no deprecated API, and no unnecessary privilege
+    so_that: the delivery carries no Cloud Service anti-pattern or maintenance debt
+    acceptance_criteria:
+      - Zero new classes under core/. The existing archetype samples
+        (SimpleScheduledTask, SimpleResourceListener, SimpleServlet, LoggingFilter,
+        HelloWorldModel) are left untouched — not extended, not copied as a pattern.
+      - No new Scheduler, ResourceChangeListener, JCR EventListener, OSGi EventHandler,
+        Replicator or AssetManager usage is introduced.
+      - No `getAdministrativeResourceResolver`, no `System.out`, no `printStackTrace`.
+      - NO new service user / repoinit entry is added: with no custom Java reading fragments, the
+        Core Content Fragment component uses the request's own resolver, and DAM content is
+        anonymously readable on publish. The absence is a recorded decision, not an omission.
+      - The instance-wide singleton `com.adobe.cq.dam.cfm.graphql.cf.GraphQlServlet` OSGi config
+        is NOT shipped (it would set enable.get/post/ui for the entire instance and every other
+        team on it). Adobe's per-tier defaults are relied on. See Q-001.
+      - Auditron confirms `mvn clean install` passes with no new build warnings.
+    domain: ops
+    candidate_agents: [configsmith, auditron]
+
+  - id: US-014
+    as: P2 (Consumer Front-End Developer)
+    want: a written delivery contract for the persisted queries
+    so_that: I can build the consumer without access to the AEM author instance
+    acceptance_criteria:
+      - design/persisted-query-contracts.md exists with one section per query: query name,
+        full GraphQL text, execution URL, matrix parameters and their format (`;name=value`, not
+        `?name=value`; path values NOT URL-encoded), a full example JSON response, and the
+        isolation scope of the query.
+      - It states the schema-naming rules the consumer will hit: type = `<ModelName>Model`, query
+        fields = `<modelName>List` / `<modelName>ByPath` / `<modelName>ById`, `byPath` takes
+        `_path: String!`, Reference unions require inline fragments, rich text is
+        `MultiFormatString` (`{ html }` / `{ plaintext }`).
+      - It names the CORS allow-list the consumer origin must be added to (US-006).
+      - It records the model-change compatibility rules (rename/delete a field = breaking).
+      - Its example JSON responses carry the VERBATIM source strings (Q-005 resolved to verbatim
+        extraction per the 2026-08-25T18:15Z DECISIONS.md entry), not illustrative placeholder
+        copy — a consumer developer reading the contract must see the real payload, and Sentinel's
+        exact-match parity check would flag any divergence between contract and delivery.
+    domain: headless
+    candidate_agents: [designforge]
+
+nfr:
+  performance:
+    lcp_ms_target: null           # N/A — no rendered surface in scope (AD-1)
+    inp_ms_target: null           # N/A — no rendered surface in scope
+    cls_target: null              # N/A — no rendered surface in scope
+    ttfb_ms_target: 600           # applies to GET /graphql/execute.json/... origin response
+    graphql_p75_uncached_ms_target: 800   # GET /graphql/execute.json/... origin response, p75
+    graphql_p75_cached_ms_target: 200     # same, CDN/dispatcher-cached
+    payload_kb_soft_ceiling: 150          # landing-page-by-path JSON response
+    note: >
+      There is no rendered surface in this run, so Core Web Vitals (LCP/INP/CLS) are not
+      measurable and are explicitly N/A — Sentinel must not report them as failures or gaps.
+      The ONLY performance surface is the persisted-query HTTP response: latency, payload size,
+      and cacheability.
+  security:
+    - Delivery is anonymous read-only. No authenticated or personalised query in scope.
+    - CORS is an explicit origin allow-list; never `.*`; `supportscredentials` false.
+    - Ad-hoc POST queries and schema introspection must not be enabled on publish. Rely on Adobe's
+      per-tier defaults; do NOT ship the instance-wide GraphQlServlet singleton config (US-013).
+    - No secrets, PII, pricing entitlements or unpublished commercial terms in Content Fragments —
+      any service user with jcr:read on the DAM path can read them.
+    - No new service user, no new ACL grant, no repoinit change (US-013).
+    - No credentials, tokens or environment URLs committed to the repo.
+  accessibility: WCAG-2.1-AA
+  accessibility_notes:
+    - >
+      In a headless payload the accessibility obligation shifts INTO the data: alt text must be
+      present in the GraphQL response, because there is no AEM-rendered <img> for a later fix to
+      catch. Every asset-reference field must be paired with authored alt/description text
+      (US-004) and the query must expose it.
+    - Rich-text (`MultiFormatString`) `html` output must be semantic (headings, lists, links) and
+      must not carry inline presentational styling that a consumer cannot override.
+    - No rendered-surface a11y checks apply (no page, no DOM, no contrast, no heading order).
+      WCAG conformance in this run means the PAYLOAD carries what a conformant consumer needs.
+  seo:
+    - Not a deliverable of this run. Pure-headless delivery produces JSON; SEO is owned by
+      whatever consumer renders it.
+    - `landing-page` carries `seoTitle` and `seoDescription` fields so a future consumer can emit
+      correct metadata — the data obligation is met even though the rendering is out of scope.
+    - No indexable AEM surface is produced, so there is no crawl, canonical, or sitemap concern.
+  browsers:
+    - N/A — no browser is involved in any deliverable, because AD-1 (confirmed per the
+      2026-08-25T18:15Z DECISIONS.md entry) produces no consumer UI and no AEM-rendered page.
+      There is therefore no browser matrix and no browser-based testing in this run. Per-track
+      justification for each individual browser-dependent check is in
+      `testing_tracks_not_applicable` — this bullet is the summary, not the justification.
+    - The consumer contract assumes only standard HTTP GET + JSON over HTTPS with CORS, so it
+      imposes no browser-specific requirement on a future consumer.
+  i18n:
+    - Single locale in scope: `us/en`. Content root /content/headless-test/us/en already exists.
+    - Rich-text fields are marked `translatable="true"` so a future locale can be added without a
+      breaking model change.
+    - Fragment paths are namespaced under /content/dam/headless-test/chisel/ so a locale-scoped
+      sibling tree can be introduced later without touching this run's content.
+    - No translation project, no language copy, no MSM in scope.
+
+testing_tracks_not_applicable:
+  # Required by the 2026-08-25T18:15Z DECISIONS.md entry: with AD-1 confirmed, a Visual/UI-test
+  # N/A is legitimately grounded — but it must be justified PER TRACK with a reason citing AD-1,
+  # never as a blanket track-level N/A (§ P12). One row per track. Each row is an instruction to
+  # Sentinel/Auditron to record the track as N/A WITH this reason, not to leave it unchecked.
+  # NOTE the direction of reasoning: § P6 / § P8 stood down because AD-1 removes the rendered
+  # surface AND because neither supplied PNG is a page screenshot (two independent reasons);
+  # § P7 (DAM) did NOT stand down and is ACTIVE (US-004).
+  - track: Tier-A visual diff (desktop 1440x900)
+    status: N/A
+    reason: >
+      AD-1 (18:15Z entry) produces no rendered surface, so there is no delivered output to
+      capture. Independently, neither supplied PNG is a page screenshot — both are text-free
+      editorial photographs — so there is also no reference layout to diff against
+      (plan/reference-deconstruction.md § 5 records every visual attribute as NOT OBSERVED).
+    owner_to_record: sentinel
+  - track: Tier-A visual diff (mobile 390x844)
+    status: N/A
+    reason: Same as the desktop track — no rendered output at either viewport under AD-1.
+    owner_to_record: sentinel
+  - track: Browser automation / page fetch
+    status: N/A
+    reason: >
+      AD-1 delivers no page URL. The only HTTP surface is
+      GET /graphql/execute.json/headless-test/<name>, which Sentinel exercises directly as an HTTP
+      request — that is the content-parity track, not a browser track.
+    owner_to_record: sentinel
+  - track: Core Web Vitals (LCP / INP / CLS)
+    status: N/A
+    reason: >
+      Unmeasurable without a rendered document. AD-1 produces none. Recorded as N/A, explicitly
+      NOT as a gap or a failure. The performance obligation is redirected to the persisted-query
+      response (TTFB, p75 latency, payload size, Cache-Control) — see `nfr.performance`.
+    owner_to_record: sentinel
+  - track: Page-level accessibility scan (DOM, contrast, heading order, focus order)
+    status: N/A
+    reason: >
+      No DOM exists under AD-1. The accessibility obligation is redirected INTO the payload: alt
+      text must be present in the GraphQL response (US-004, `nfr.accessibility_notes`), which
+      Sentinel DOES assert. The a11y obligation is relocated, not dropped.
+    owner_to_record: sentinel
+  - track: ui.tests Cypress-vs-Playwright harness migration (§ 9.1 pre-deploy obligation)
+    status: N/A-under-AD-1
+    reason: >
+      Recorded explicitly per the 2026-08-25T18:15Z DECISIONS.md entry, which resolves this item
+      directly: there is no UI to test — no rendered surface and no consumer app built in this
+      repo — so the pre-deploy harness migration is inapplicable by the same AD-1 logic that makes
+      the visual tracks N/A. `ui.tests` is untouched by this run. This MUST be recorded as
+      "N/A under AD-1 — no rendered surface, no ui.tests obligation" in handoffs/pilot.yaml and in
+      the session-close verification gate, NOT left as an unchecked box. The checklist fields
+      normally sourced from handoffs/blockwright.yaml
+      (`ui_tests.harness_state_on_entry`, `cypress_fully_removed`, `scenario_coverage.unmapped`)
+      have no Blockwright source this run because `blockwright` is not scheduled; they take this
+      N/A-under-AD-1 disposition instead.
+    owner_to_record: pilot
+  - track: Reference-asset provenance record
+    status: NOT N/A — STILL REQUIRED
+    reason: >
+      The 18:15Z entry requires that `design/reference-assets.md` still record the reference URL
+      plus BOTH PNG paths (home-hero.png, home-movement.png), even though the visual tracks are
+      N/A. Provenance of the supplied reference set survives the N/A. Scheduled as WB-02A.
+    owner_to_record: designforge
+  - track: DAM asset seeding + delivery resolvability (§ P7 DAM checkpoint)
+    status: NOT N/A — ACTIVE
+    reason: >
+      The 18:15Z entry states the two DAM assets remain in scope and must be verified resolvable
+      via GraphQL/DAM delivery. § P7 stays active; only § P6 / § P8 stand down. See US-004.
+    owner_to_record: composer, sentinel
+
+descoped:
+  # Descoped under AD-1, which is CONFIRMED per the 2026-08-25T18:15Z DECISIONS.md entry — the
+  # same entry records that Option B (the verification page) was REJECTED, not merely unchosen.
+  # These are NOT deletions of a requirement the intake asked for — the intake named CF Models and
+  # GraphQL queries, not a page or a stylesheet. Both stories were Strategist-originated additions
+  # in r01 and are withdrawn by the same author, with the human's rejection of Option B on record.
+  # Restorable verbatim if a human ever reverses AD-1.
+  - id: US-008
+    was: AEM-rendered verification page assembled from existing Core CF component proxies
+    reason: >
+      Descoped. No rendered surface of any kind is in scope. Validation is the persisted-query
+      response diffed against the source content — not a page. This also removes the template
+      strategy, the parsys authoring-depth concern, page a11y/CWV checks, and Sentinel's page
+      fetch. Consequence to hold knowingly: there is NO human-eyeballable surface, so the Lead's
+      review at the resume gate is a JSON review (Sentinel's captured responses + diff report),
+      not a visual one. Recorded as accepted risk R-13 with a compensating control.
+    restore_if: >
+      A HUMAN reverses AD-1 in favour of Option B (pure headless + stock-Core-Component
+      verification page). Option B was put to the human and REJECTED per the 2026-08-25T18:15Z
+      DECISIONS.md entry, so reversal requires a new, explicit human decision — no agent may
+      reintroduce it. Cost to restore is authoring-only, not development — see
+      technical-specifications.md § 1.0.1.
+  - id: US-009
+    was: Reference design-token capture as an SCSS partial in the existing clientlib-site
+    reason: >
+      Descoped. With no rendered surface and no consumer app, there is no consumer for design
+      tokens in this run — and § 5 of plan/reference-deconstruction.md records every visual
+      attribute as NOT OBSERVED, so there is nothing truthful to capture: neither supplied image
+      is a page screenshot. This is why `blockwright` is not scheduled (see
+      technical-specifications.md § 1.1). The observed asset facts are recorded in
+      plan/reference-deconstruction.md § 3, which is the durable home for them.
+    restore_if: >
+      A real screenshot or Figma frame is supplied AND a visual consumer is commissioned. The
+      reference-deconstruction artifact must be re-issued first.
+
+out_of_scope:
+  - Building the front-end consumer application (SPA / Next.js / static site / native app). No
+    such module exists in this repo, no build or hosting target is defined, and the intake does
+    not ask for one. The deliverable is the AEM-side contract the consumer will call.
+  - Any AEM-rendered surface — no verification page, no demo page, no hybrid page, no Sling Model,
+    no HTL, no component, no template work, no clientlib change. Descoped under AD-1 (US-008).
+  - Any UI testing — no Cypress / `ui.tests` suite, no browser automation, no visual or Tier-A
+    regression diff, no page-level accessibility or Core Web Vitals measurement. There is no UI to
+    test, because AD-1 produces none. Each of these is recorded as a PER-TRACK N/A with its own
+    AD-1-citing reason in `testing_tracks_not_applicable` — including the `ui.tests`
+    Cypress-vs-Playwright harness obligation, which the 2026-08-25T18:15Z DECISIONS.md entry
+    resolves as N/A-under-AD-1 rather than a skipped item.
+  - Design-token capture / SCSS of any kind. Descoped under AD-1 (US-009); `blockwright` is not
+    scheduled for this run.
+  - Transplanting any HTML, DOM, CSS, class names, scripts or assets-as-markup from
+    chiselindustries.com. Content is reused (S1 = content-source-of-truth); markup is not.
+  - Site chrome as content — navigation and footer models/fragments
+    (reference-deconstruction.md § 4.1). These are consumer-shell concerns in a headless delivery.
+  - Scaffolding a `dispatcher/` module. It is absent from this repo; adding a module is a
+    repo-structure change needing its own pipeline validation. See Q-002 and US-007.
+  - Authenticated, personalised, or entitlement-gated GraphQL delivery. No IDP, no token exchange.
+  - Any third-party / non-AEM system integration — no external API, no IDP, no MarTech, no
+    analytics, no commerce/CIF, no search service. This is why `bridgesmith` is NOT scheduled
+    (see technical-specifications.md § Integration map).
+  - AEM Forms, Universal Editor, SPA Editor, Edge Delivery Services.
+  - Bulk asset migration. Exactly the two supplied images are seeded.
+  - Cloud Manager Dev / Stage / Prod pipeline execution, Stage soak, production promotion.
+  - Merging the PR, deploying the real environment, rollback, post-deploy incident triage —
+    the Lead's manual steps.
+
+open_questions:
+  # NO BLOCKING QUESTION REMAINS OPEN. The two that were blocking (Q-005, Q-008) are both RESOLVED
+  # by the 2026-08-25T18:15Z DECISIONS.md entry and are recorded under `open_questions_resolved`.
+  # Q-001, Q-002, Q-003, Q-004, Q-006 and Q-007 are non-blocking and proceed on their recorded
+  # defaults, remaining open for a human to override at any later checkpoint.
+
+  - id: Q-001
+    statement: >
+      Is the target real environment dedicated to this project, or shared with other teams? This
+      determines whether the instance-wide singleton OSGi config
+      `com.adobe.cq.dam.cfm.graphql.cf.GraphQlServlet` may be shipped to control
+      enable.get/post/ui. DEFAULT: do NOT ship it — it would silently change GraphiQL and ad-hoc
+      POST behaviour for every team on the instance. Adobe's per-tier defaults are relied on.
+    blocking: false
+    affects: [US-013]
+
+  - id: Q-002
+    statement: >
+      Should a `dispatcher/` module be scaffolded so `/graphql/execute.json/*` gets explicit
+      allow + cache rules? The module does not exist in this repo. DEFAULT: no — rely on AEMaaCS
+      CDN defaults for this run; Sentinel measures and reports the observed `Cache-Control`
+      header, and a missing header becomes a finding with a concrete remediation rather than a
+      silent pass.
+    blocking: false
+    affects: [US-007]
+
+  - id: Q-003
+    statement: >
+      Which stack will the eventual consumer use (React/Next, Vue, native mobile, server-side
+      renderer)? Affects only the example snippets in design/persisted-query-contracts.md, not any
+      AEM deliverable. DEFAULT: write the contract stack-agnostically (plain `fetch` + JSON).
+    blocking: false
+    affects: [US-014]
+
+  - id: Q-004
+    statement: >
+      Multi-valued fragment-reference authoring trade-off on the `landing-page` model. Option A
+      (`valueType="string/content-fragment[]"` + `.../fragmentreference/multifield`) gives authors
+      a real "add more" multifield but CANNOT be hand-authored in JCR — the CF Model Editor writes
+      a target-model link no plain property reproduces, so a JCR-only version is dropped from the
+      schema with `SCHEMA_INCOMPLETE_FIELD_REMOVED`. Option B (`valueType="string/reference[]"`
+      with the single-picker resource type) is fully JCR-authorable and deploys with zero rework,
+      but authors get a single path-picker instead of a multifield. DEFAULT: Option B — this run's
+      priority is a reproducible zero-manual-step deploy. Confirm authors accept the degraded
+      picker, or accept a documented post-deploy CF-Model-Editor step to upgrade to Option A.
+    blocking: false
+    affects: [US-001, US-005]
+
+  - id: Q-006
+    statement: >
+      Confirm it is acceptable to commit ~2.4 MB of PNG binaries (784 KB + 1,622 KB) into
+      ui.content so the DAM seed is reproducible from source. DEFAULT: yes — the archetype
+      already ships a sample binary (asset.jpg), and the alternative (runtime upload via the
+      Assets HTTP API) introduces a manual step that breaks the zero-manual-step deploy goal.
+      If rejected, US-004 becomes a documented manual upload step and Sentinel verifies the
+      assets exist rather than that they deployed.
+    blocking: false
+    affects: [US-004]
+
+  - id: Q-007
+    statement: >
+      Which real-environment URL will Sentinel target, and what is its auth mode? Required at the
+      resume gate, not now. The Lead records it in DECISIONS.md after the manual deploy. Sentinel
+      must NOT be pointed at http://localhost:4502 or an RDE.
+    blocking: false
+    affects: [US-010]
+
+open_questions_resolved:
+
+  - id: Q-005
+    statement: >
+      CONFIRM the content role of https://www.chiselindustries.com/. Strategist classified it
+      `content-source-of-truth` (S9.a default for a live URL with no placeholder-copy statement),
+      meaning Designforge extracts Chisel's real marketing copy VERBATIM and Composer authors it
+      into Content Fragments unchanged. The intake's "reference ONLY" wording is genuinely
+      ambiguous between that and "structure only, fresh copy". There is also a brand/legal
+      dimension: this reproduces a third party's marketing copy verbatim into a demo repository.
+    was_blocking: true
+    resolved: true
+    resolution: VERBATIM EXTRACTION — `content-source-of-truth` confirmed.
+    resolved_by: >
+      2026-08-25T18:15Z DECISIONS.md entry, "ARCHITECTURE REVIEW CHECKPOINT — GENUINE HUMAN
+      DECISIONS", Decision 2. Provenance recorded in that entry: parent-session
+      architecture-review checkpoint, 2026-08-25, user selection via AskUserQuestion.
+    consequences:
+      - chiselindustries.com is the source of BOTH structure and the actual copy strings
+        (headline / body / CTA), extracted verbatim into Content Fragments.
+      - The brand/legal note (reproducing a named third party's live marketing copy inside this
+        repo) was put to the user, who chose to proceed. Per that entry it is recorded and NOT to
+        be re-litigated — no downstream agent should re-raise it as a blocker.
+      - HTML / DOM / CSS are still NOT transplanted. Verbatim applies to authored text content
+        only, never markup or styling.
+      - Sentinel's content-parity track is held to EXACT-MATCH on these fields, not fuzzy matching
+        (threaded into US-003, US-010, US-014 acceptance criteria and into WB-02 / WB-11 / WB-16).
+    affects: [US-003, US-010, US-014, WB-02, WB-11, WB-16]
+
+  - id: Q-008
+    statement: >
+      Which rendering-surface architecture? OPTION A (Strategist's recommendation) — pure headless:
+      CF Models + fragments + endpoint + persisted queries only, no AEM page, no consumer app, no
+      UI testing; acceptance is the persisted-query JSON diffed against the source content.
+      OPTION B (the genuine alternative Strategist raised) — the same headless delivery PLUS a
+      small AEM verification page assembled from existing Core Content Fragment component proxies,
+      giving the Lead a human-eyeballable surface at the resume gate; cost is authoring-only (no
+      new component, no Java) but it re-admits template/parsys concerns, page a11y + Core Web
+      Vitals, a Sentinel page fetch, and the R-11 risk of drift into the shared `page-content`
+      template.
+    was_blocking: true
+    resolved: true
+    resolution: >
+      OPTION A — AD-1 CONFIRMED. Option B (the verification page) was explicitly REJECTED, not
+      merely unchosen.
+    resolved_by: >
+      2026-08-25T18:15Z DECISIONS.md entry, Decision 1. Provenance recorded in that entry:
+      parent-session architecture-review checkpoint, 2026-08-25, user selection via
+      AskUserQuestion.
+    honesty_note: >
+      Q-008 was marked resolved in r03 on the strength of a quote I fabricated. That resolution is
+      WITHDRAWN and this one replaces it. This record is retained (rather than deleted) because
+      Option B is a real alternative a future reviewer may want to see, and because the audit trail
+      of what was decided — and on what actual basis — should be legible. The 18:15Z decision is
+      not retroactive validation of the r03 claim; it is an independent, real event.
+    scope_of_authorization: >
+      Confirms AD-1/Option A and the scope listed in Decision 1 (5 CF Models, GraphQL endpoint,
+      ~14 fragments, 2 seeded DAM assets, 4 persisted queries, zero custom Java, no UI testing,
+      blockwright and bridgesmith not scheduled) plus the four named consequences. It does NOT
+      answer Q-001, Q-002, Q-003, Q-004, Q-006 or Q-007 — each proceeds on its recorded default.
+    affects: [US-008, US-009, US-010, all]
+
+constraints:
+  - AEM as a Cloud Service only. No AMS / on-prem / 6.5 pattern.
+  - Project identifiers are fixed: project `headless-test`, package `com.headlesstest.aem`,
+    group `Headless Test`. Use verbatim.
+  - Default git branch is **`main`**, NOT `master`. Pilot's PR must target `main`.
+  - Core Components 2.28.0 (pom.xml `core.wcm.components.version`). Only v2/v3 Core Components
+    already proxied under /apps/headless-test/components may be used.
+  - No `dispatcher/` module exists in this repo (modules: all, core, it.tests, ui.apps,
+    ui.apps.structure, ui.config, ui.content, ui.tests).
+  - VERIFIED GAP — ui.content filter.xml `/content/dam/headless-test` filter excludes all
+    children except jcr:content. New DAM assets and fragments will NOT ship without a new filter
+    root.
+  - VERIFIED GAP — the existing `CORSPolicyImpl~headless-test` config is `config.author` only and
+    scopes to `/(content|conf)/headless-test.*`, which matches neither
+    `/graphql/execute.json/...` nor `/content/_cq_graphql/...`.
+  - `mode="merge"` FileVault filters do not re-seed changed content over an existing node.
+  - Persisted queries MUST be `persistentQueries` binary nodes. A `persistedQueries/*.json` file
+    deploys a node the GraphQL servlet ignores.
+  - CF Models are mutable content owned by authors after first deploy — the JCR form in
+    ui.content is a seed, and field renames/deletions are breaking changes for consumers.
+  - No new component, no new template, no new template type, no clientlib change, no new Java
+    class, no new service user, and no authored page. `ui.apps`, `ui.frontend`, `core`, `it.tests`
+    and `ui.tests` are untouched by this run.
+  - The existing template /conf/headless-test/settings/wcm/templates/page-content and the existing
+    /content/headless-test page tree must be left exactly as they are — no page is authored and no
+    template `structure/` is modified.
+  - Sentinel's real-environment target is the persisted-query endpoint
+    (`/graphql/execute.json/headless-test/<name>`) on the publish tier. No page URL is validated,
+    because none is produced.
+  - No secrets, tokens, or real-environment URLs committed to the repository.
