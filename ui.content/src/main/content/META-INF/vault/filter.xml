@@ -7,5 +7,7 @@
         <include pattern="/content/dam/headless-test/jcr:content(/.*)?"/>
     </filter>
     <filter root="/content/dam/headless-test/asset.jpg" mode="merge"/>
+    <filter root="/content/dam/headless-test/chisel" mode="merge"/>
     <filter root="/content/experience-fragments/headless-test" mode="merge"/>
+    <filter root="/content/cq:graphql/headless-test" mode="merge"/>
 </workspaceFilter>

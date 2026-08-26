@@ -1,0 +1,18 @@
+query StatsList {
+  statList(
+    filter: {
+      _path: {
+        _expressions: [
+          { value: "/content/dam/headless-test/chisel", _operator: STARTS_WITH }
+        ]
+      }
+    }
+  ) {
+    items {
+      value
+      label
+      detail
+      _path
+    }
+  }
+}

@@ -1,0 +1,25 @@
+query PillarsList {
+  pillarList(
+    filter: {
+      _path: {
+        _expressions: [
+          { value: "/content/dam/headless-test/chisel", _operator: STARTS_WITH }
+        ]
+      }
+    }
+  ) {
+    items {
+      title
+      description { html }
+      category
+      linkLabel
+      linkPath
+      image {
+        ... on ImageRef { _path width height }
+        ... on DocumentRef { _path }
+      }
+      imageAlt
+      _path
+    }
+  }
+}

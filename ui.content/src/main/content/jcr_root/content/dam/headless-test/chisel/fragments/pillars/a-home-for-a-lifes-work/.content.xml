@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    xmlns:dam="http://www.day.com/dam/1.0"
+    xmlns:cq="http://www.day.com/jcr/cq/1.0"
+    jcr:primaryType="dam:Asset">
+    <jcr:content
+        jcr:primaryType="dam:AssetContent"
+        jcr:title="A home for a life's work"
+        contentFragment="{Boolean}true">
+        <data
+            jcr:primaryType="nt:unstructured"
+            cq:model="/conf/headless-test/settings/dam/cfm/models/pillar">
+            <master
+                jcr:primaryType="nt:unstructured"
+                title="A home for a life's work"
+                category="offering"
+                description="&lt;p&gt;Ready to step back? We're a long-term home, not a quick flip. We keep the name, keep the crew, and carry the legacy forward.&lt;/p&gt;"/>
+        </data>
+        <metadata jcr:primaryType="nt:unstructured"/>
+    </jcr:content>
+</jcr:root>

@@ -1,0 +1,81 @@
+# Changed-file inventory — 2026-08-25T17-00Z-chisel-headless-integration
+# Union of files_created / files_modified from handoffs/{configsmith,composer}.yaml (designforge and
+# strategist produced only .md/.yaml design/plan docs under runs/, not repo source — listed separately below).
+# Verified independently against `git status --porcelain` (8 top-level changed paths) — see
+# code-quality-report.md § "Changed-file inventory verification".
+
+## Modified (1)
+ui.content/src/main/content/META-INF/vault/filter.xml
+
+## Created — CF Models (configsmith: graphql endpoint folder; composer: the 5 models) (5 files)
+ui.content/src/main/content/jcr_root/conf/headless-test/settings/dam/cfm/models/hero/.content.xml
+ui.content/src/main/content/jcr_root/conf/headless-test/settings/dam/cfm/models/stat/.content.xml
+ui.content/src/main/content/jcr_root/conf/headless-test/settings/dam/cfm/models/pillar/.content.xml
+ui.content/src/main/content/jcr_root/conf/headless-test/settings/dam/cfm/models/content-section/.content.xml
+ui.content/src/main/content/jcr_root/conf/headless-test/settings/dam/cfm/models/landing-page/.content.xml
+
+## Created — GraphQL endpoint node (configsmith, WB-06) (2 files)
+ui.content/src/main/content/jcr_root/content/_cq_graphql/headless-test/.content.xml
+ui.content/src/main/content/jcr_root/content/_cq_graphql/headless-test/endpoint/.content.xml
+
+## Created — Persisted queries (composer, WB-12) (10 files: 4 x [.content.xml + _jcr_data.binary] + 2 parent folder nodes)
+ui.content/src/main/content/jcr_root/conf/headless-test/settings/graphql/.content.xml
+ui.content/src/main/content/jcr_root/conf/headless-test/settings/graphql/persistentQueries/.content.xml
+ui.content/src/main/content/jcr_root/conf/headless-test/settings/graphql/persistentQueries/landing-page-by-path/.content.xml
+ui.content/src/main/content/jcr_root/conf/headless-test/settings/graphql/persistentQueries/landing-page-by-path/_jcr_content/_jcr_data.binary
+ui.content/src/main/content/jcr_root/conf/headless-test/settings/graphql/persistentQueries/hero-by-path/.content.xml
+ui.content/src/main/content/jcr_root/conf/headless-test/settings/graphql/persistentQueries/hero-by-path/_jcr_content/_jcr_data.binary
+ui.content/src/main/content/jcr_root/conf/headless-test/settings/graphql/persistentQueries/stats-list/.content.xml
+ui.content/src/main/content/jcr_root/conf/headless-test/settings/graphql/persistentQueries/stats-list/_jcr_content/_jcr_data.binary
+ui.content/src/main/content/jcr_root/conf/headless-test/settings/graphql/persistentQueries/pillars-list/.content.xml
+ui.content/src/main/content/jcr_root/conf/headless-test/settings/graphql/persistentQueries/pillars-list/_jcr_content/_jcr_data.binary
+
+## Created — DAM assets + fragments (composer, WB-10/WB-11) (23 files)
+ui.content/src/main/content/jcr_root/content/dam/headless-test/chisel/.content.xml
+ui.content/src/main/content/jcr_root/content/dam/headless-test/chisel/home-hero.png/.content.xml
+ui.content/src/main/content/jcr_root/content/dam/headless-test/chisel/home-hero.png/_jcr_content/.content.xml
+ui.content/src/main/content/jcr_root/content/dam/headless-test/chisel/home-hero.png/_jcr_content/renditions/original
+ui.content/src/main/content/jcr_root/content/dam/headless-test/chisel/home-hero.png/_jcr_content/renditions/original.dir/.content.xml
+ui.content/src/main/content/jcr_root/content/dam/headless-test/chisel/home-movement.png/.content.xml
+ui.content/src/main/content/jcr_root/content/dam/headless-test/chisel/home-movement.png/_jcr_content/.content.xml
+ui.content/src/main/content/jcr_root/content/dam/headless-test/chisel/home-movement.png/_jcr_content/renditions/original
+ui.content/src/main/content/jcr_root/content/dam/headless-test/chisel/home-movement.png/_jcr_content/renditions/original.dir/.content.xml
+ui.content/src/main/content/jcr_root/content/dam/headless-test/chisel/fragments/.content.xml
+ui.content/src/main/content/jcr_root/content/dam/headless-test/chisel/fragments/heroes/.content.xml
+ui.content/src/main/content/jcr_root/content/dam/headless-test/chisel/fragments/heroes/home-hero/.content.xml
+ui.content/src/main/content/jcr_root/content/dam/headless-test/chisel/fragments/pages/.content.xml
+ui.content/src/main/content/jcr_root/content/dam/headless-test/chisel/fragments/pages/home/.content.xml
+ui.content/src/main/content/jcr_root/content/dam/headless-test/chisel/fragments/stats/.content.xml
+ui.content/src/main/content/jcr_root/content/dam/headless-test/chisel/fragments/stats/free-pricing/.content.xml
+ui.content/src/main/content/jcr_root/content/dam/headless-test/chisel/fragments/stats/annual-savings/.content.xml
+ui.content/src/main/content/jcr_root/content/dam/headless-test/chisel/fragments/stats/back-office-time/.content.xml
+ui.content/src/main/content/jcr_root/content/dam/headless-test/chisel/fragments/pillars/.content.xml
+ui.content/src/main/content/jcr_root/content/dam/headless-test/chisel/fragments/pillars/capital/.content.xml
+ui.content/src/main/content/jcr_root/content/dam/headless-test/chisel/fragments/pillars/technology/.content.xml
+ui.content/src/main/content/jcr_root/content/dam/headless-test/chisel/fragments/pillars/community/.content.xml
+ui.content/src/main/content/jcr_root/content/dam/headless-test/chisel/fragments/pillars/grow-without-giving-it-up/.content.xml
+ui.content/src/main/content/jcr_root/content/dam/headless-test/chisel/fragments/pillars/a-home-for-a-lifes-work/.content.xml
+ui.content/src/main/content/jcr_root/content/dam/headless-test/chisel/fragments/pillars/keep-more-of-every-dollar/.content.xml
+ui.content/src/main/content/jcr_root/content/dam/headless-test/chisel/fragments/sections/.content.xml
+ui.content/src/main/content/jcr_root/content/dam/headless-test/chisel/fragments/sections/invest-in-businesses/.content.xml
+ui.content/src/main/content/jcr_root/content/dam/headless-test/chisel/fragments/sections/runs-the-business/.content.xml
+ui.content/src/main/content/jcr_root/content/dam/headless-test/chisel/fragments/sections/people-of-the-trades/.content.xml
+ui.content/src/main/content/jcr_root/content/dam/headless-test/chisel/fragments/sections/bolt/.content.xml
+
+## Created — OSGi config (configsmith, WB-07) (1 file)
+ui.config/src/main/content/jcr_root/apps/headless-test/osgiconfig/config.publish/com.adobe.granite.cors.impl.CORSPolicyImpl~graphql.cfg.json
+
+## Confirmed UNCHANGED (verified via `git status --porcelain` + `git status --porcelain -- core/ ui.apps/ ui.frontend/ it.tests/ ui.tests/`)
+core/                — zero changes (zero new classes)
+ui.apps/             — zero changes
+ui.frontend/         — zero changes
+it.tests/            — zero changes
+ui.tests/            — zero changes
+/content/headless-test (existing page tree) — zero changes (grep-confirmed by composer, spot-verified by auditron)
+ui.config/.../config/org.apache.sling.jcr.repoinit.RepositoryInitializer~headless-test.cfg.json — read, not modified
+ui.config/.../config.author/com.adobe.granite.cors.impl.CORSPolicyImpl~headless-test.cfg.json — read, not modified
+
+## Design/plan artifacts (not repo source; consumed by this stage, not part of the build)
+.claude/agents/runs/2026-08-25T17-00Z-chisel-headless-integration/design/*.md
+.claude/agents/runs/2026-08-25T17-00Z-chisel-headless-integration/plan/*.md, *.yaml
+.claude/agents/runs/2026-08-25T17-00Z-chisel-headless-integration/handoffs/*.yaml

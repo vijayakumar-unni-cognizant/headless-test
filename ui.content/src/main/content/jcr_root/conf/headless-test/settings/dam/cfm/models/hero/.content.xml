@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0"
+          xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+          xmlns:cq="http://www.day.com/jcr/cq/1.0"
+          xmlns:sling="http://sling.apache.org/jcr/sling/1.0"
+          xmlns:granite="http://www.adobe.com/jcr/granite/1.0"
+          jcr:primaryType="cq:Template"
+          allowedPaths="[/content/dam/headless-test(/.*)?]"
+          ranking="{Long}100">
+  <jcr:content
+    jcr:primaryType="cq:PageContent"
+    jcr:title="Hero"
+    description="Hero banner: headline, eyebrow, summary, image, and an optional CTA."
+    status="enabled"
+    sling:resourceType="dam/cfm/models/console/components/data/entity/default"
+    sling:resourceSuperType="dam/cfm/models/console/components/data/entity"
+    cq:scaffolding="/conf/headless-test/settings/dam/cfm/models/hero/jcr:content/model"
+    cq:templateType="/libs/settings/dam/cfm/model-types/fragment">
+    <metadata jcr:primaryType="nt:unstructured"/>
+    <model
+      jcr:primaryType="cq:PageContent"
+      dataTypesConfig="/mnt/overlay/settings/dam/cfm/models/formbuilderconfig/datatypes"
+      sling:resourceType="wcm/scaffolding/components/scaffolding"
+      maxGeneratedOrder="20"
+      cq:targetPath="/content/dam/headless-test">
+      <cq:dialog
+        jcr:primaryType="nt:unstructured"
+        sling:resourceType="cq/gui/components/authoring/dialog">
+        <content
+          jcr:primaryType="nt:unstructured"
+          sling:resourceType="granite/ui/components/coral/foundation/fixedcolumns">
+          <items
+            jcr:primaryType="nt:unstructured"
+            maxGeneratedOrder="20">
+            <title
+              jcr:primaryType="nt:unstructured"
+              listOrder="1"
+              valueType="string"
+              showEmptyInReadOnly="true"
+              metaType="text-single"
+              required="on"
+              name="title"
+              maxlength="255"
+              fieldLabel="Title"
+              sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+              renderReadOnly="false">
+              <granite:data jcr:primaryType="nt:unstructured"/>
+            </title>
+            <eyebrow
+              jcr:primaryType="nt:unstructured"
+              listOrder="2"
+              valueType="string"
+              showEmptyInReadOnly="true"
+              metaType="text-single"
+              name="eyebrow"
+              maxlength="255"
+              fieldLabel="Eyebrow"
+              sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+              renderReadOnly="false">
+              <granite:data jcr:primaryType="nt:unstructured"/>
+            </eyebrow>
+            <summary
+              jcr:primaryType="nt:unstructured"
+              listOrder="3"
+              translatable="true"
+              valueType="string/multiline"
+              showEmptyInReadOnly="true"
+              metaType="text-multi"
+              required="on"
+              cfm-element="Summary"
+              name="summary"
+              sling:resourceType="dam/cfm/admin/components/authoring/contenteditor/multieditor"
+              renderReadOnly="false"
+              default-mime-type="text/html"/>
+            <heroImage
+              jcr:primaryType="nt:unstructured"
+              filter="hierarchy"
+              listOrder="4"
+              valueType="string/reference"
+              nameSuffix="contentReference"
+              showEmptyInReadOnly="true"
+              metaType="reference"
+              rootPath="/content/dam/headless-test"
+              validation="cfm.validation.contenttype.image"
+              name="heroImage"
+              fieldLabel="Hero Image"
+              showThumbnail="true"
+              sling:resourceType="dam/cfm/models/editor/components/contentreference"
+              renderReadOnly="false">
+              <granite:data
+                jcr:primaryType="nt:unstructured"
+                showThumbnail="true"
+                thumbnail-validation="cfm.validation.thumbnail.show"/>
+            </heroImage>
+            <heroImageAlt
+              jcr:primaryType="nt:unstructured"
+              listOrder="5"
+              valueType="string"
+              showEmptyInReadOnly="true"
+              metaType="text-single"
+              name="heroImageAlt"
+              maxlength="255"
+              fieldLabel="Hero Image Alt Text"
+              sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+              renderReadOnly="false">
+              <granite:data jcr:primaryType="nt:unstructured"/>
+            </heroImageAlt>
+            <ctaLabel
+              jcr:primaryType="nt:unstructured"
+              listOrder="6"
+              valueType="string"
+              showEmptyInReadOnly="true"
+              metaType="text-single"
+              name="ctaLabel"
+              maxlength="255"
+              fieldLabel="CTA Label"
+              sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+              renderReadOnly="false">
+              <granite:data jcr:primaryType="nt:unstructured"/>
+            </ctaLabel>
+            <ctaPath
+              jcr:primaryType="nt:unstructured"
+              listOrder="7"
+              valueType="string"
+              showEmptyInReadOnly="true"
+              metaType="text-single"
+              name="ctaPath"
+              maxlength="255"
+              fieldLabel="CTA Path"
+              sling:resourceType="granite/ui/components/coral/foundation/form/textfield"
+              renderReadOnly="false">
+              <granite:data jcr:primaryType="nt:unstructured"/>
+            </ctaPath>
+          </items>
+        </content>
+      </cq:dialog>
+    </model>
+  </jcr:content>
+</jcr:root>

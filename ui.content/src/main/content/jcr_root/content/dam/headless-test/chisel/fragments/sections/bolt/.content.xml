@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    xmlns:dam="http://www.day.com/dam/1.0"
+    xmlns:cq="http://www.day.com/jcr/cq/1.0"
+    jcr:primaryType="dam:Asset">
+    <jcr:content
+        jcr:primaryType="dam:AssetContent"
+        jcr:title="BOLT — Balanced Open-License Terms"
+        contentFragment="{Boolean}true">
+        <data
+            jcr:primaryType="nt:unstructured"
+            cq:model="/conf/headless-test/settings/dam/cfm/models/content-section">
+            <master
+                jcr:primaryType="nt:unstructured"
+                heading="BOLT — Balanced Open-License Terms"
+                body="&lt;p&gt;A Chisel-developed standard for fair, transparent terms in trades transactions — for customers, crews, and partners alike. A baseline of fairness the whole trade can trust, not fine print that works against the people doing the work.&lt;/p&gt;"
+                sectionImage="/content/dam/headless-test/chisel/home-movement.png"
+                sectionImageAlt="An experienced electrician pointing at breakers in an open electrical panel while a younger apprentice holds the panel door and watches."/>
+        </data>
+        <metadata jcr:primaryType="nt:unstructured"/>
+    </jcr:content>
+</jcr:root>

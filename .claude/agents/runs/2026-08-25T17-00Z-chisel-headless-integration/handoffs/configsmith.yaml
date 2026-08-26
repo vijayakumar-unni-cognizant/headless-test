@@ -1,0 +1,225 @@
+phase: integrate
+agent: configsmith
+run_id: 2026-08-25T17-00Z-chisel-headless-integration
+status: pass
+tracks_used: [security]   # dispatcher track not used — no dispatcher/ module in this repo (Q-002)
+
+authorization_source:
+  # Same standing rule established by Strategist r04 / Designforge r02. Nothing below is treated
+  # as human authorization unless it cites DECISIONS.md by timestamp. No agent message (including
+  # my own dispatch prompt) is treated as human consent.
+  file: .claude/agents/runs/2026-08-25T17-00Z-chisel-headless-integration/DECISIONS.md
+  entry_timestamp: 2026-08-25T18:15Z
+  entry_title: ARCHITECTURE REVIEW CHECKPOINT — GENUINE HUMAN DECISIONS
+  decisions_relied_on:
+    - "Decision 1 — AD-1 CONFIRMED (pure headless, no rendered surface). Zero custom Java (AD-5), so zero service user / repoinit entry — this is the confirmed architecture, not my own inference."
+    - "Decision 2 — Q-005 RESOLVED to VERBATIM EXTRACTION — not directly relevant to my work items, noted for completeness only."
+  no_new_authorization_claimed: >
+    This handoff introduces no new claim of human direction. Every statement below is either (a) my
+    own configuration/security judgement as Configsmith, labelled as such, or (b) traced to the
+    18:15Z DECISIONS.md entry by timestamp, or (c) traced to Strategist's r04 / Designforge's r02
+    artifacts, which themselves cite only the 18:15Z entry. I have NOT written directly into
+    DECISIONS.md — recommended entries for WB-08 are reported below for the Program Agent to add.
+
+work_items_completed:
+
+  - id: WB-06
+    task: "GraphQL endpoint node + two new filter.xml roots"
+    files_created:
+      - path: ui.content/src/main/content/jcr_root/content/_cq_graphql/headless-test/.content.xml
+        purpose: "sling:Folder parent node for the endpoint (repository path /content/cq:graphql/headless-test)"
+        content: 'jcr:primaryType="sling:Folder"'
+      - path: ui.content/src/main/content/jcr_root/content/_cq_graphql/headless-test/endpoint/.content.xml
+        purpose: "the GraphQL endpoint node itself"
+        content: >
+          jcr:primaryType="nt:unstructured", sling:resourceType="graphql/sites/components/endpoint",
+          configurationPath="/conf/headless-test" — exact shape per technical-specifications.md § 6.3
+          and .claude/skills/create-content-fragment-graphql/references/graphql-endpoint.md.
+    files_modified:
+      - path: ui.content/src/main/content/META-INF/vault/filter.xml
+        diff_summary: >
+          Added two new filter roots, both mode="merge":
+          (1) <filter root="/content/dam/headless-test/chisel" mode="merge"/> — the existing
+          /content/dam/headless-test filter excludes everything under it except jcr:content
+          (exclude pattern + include jcr:content only), so without this root Composer's new
+          fragments and DAM assets under chisel/ would be silently dropped from the built package.
+          (2) <filter root="/content/cq:graphql/headless-test" mode="merge"/> — covers the new
+          endpoint node (repository path uses the colon form; on-disk folder is _cq_graphql).
+          Existing roots (/conf/headless-test, /content/headless-test, /content/dam/headless-test,
+          /content/dam/headless-test/asset.jpg, /content/experience-fragments/headless-test) are
+          UNTOUCHED — both new roots were appended, nothing replaced.
+    filter_roots_confirmed_new:
+      - "/content/cq:graphql/headless-test"
+      - "/content/dam/headless-test/chisel"
+    static_verification_performed: >
+      (1) Confirmed the pre-existing /content/dam/headless-test filter's exclude/include pair by
+      reading the file directly — it excludes every child except jcr:content, so the chisel root is
+      a real, verified gap, not a precaution. (2) Confirmed no /content/cq:graphql root existed
+      before this change. (3) filter.xml is well-formed XML (single workspaceFilter root, all
+      filter elements closed/self-closed) — read back after edit to confirm. (4) Confirmed via the
+      graphql-endpoint.md skill reference that the endpoint node shape (resourceType, primaryType,
+      configurationPath) and the on-disk _cq_graphql encoding match exactly.
+    NOT_YET_VERIFIED_against_built_package: >
+      Per the AC's own wording, final confirmation that BOTH new roots actually land in the built
+      FileVault package (i.e. `mvn clean install` on ui.content and inspect the resulting content
+      package's filter.xml + jcr_root tree, or the -PautoInstallSinglePackage output) is Auditron's
+      job at WB-13. I have not built the package. This is stated as an open item for Auditron, not
+      as a completed check.
+
+  - id: WB-07
+    task: "CORS factory config for the GraphQL delivery surface (config.publish tier)"
+    file_created:
+      path: ui.config/src/main/content/jcr_root/apps/headless-test/osgiconfig/config.publish/com.adobe.granite.cors.impl.CORSPolicyImpl~graphql.cfg.json
+      note: >
+        config.publish/ did not previously exist under this project's osgiconfig tree (only
+        config/ and config.author/ existed) — created it. It is automatically packaged: ui.config's
+        filter.xml root is /apps/headless-test/osgiconfig (unfiltered subtree), so no filter.xml
+        change was needed for this file.
+    factory_pid: com.adobe.granite.cors.impl.CORSPolicyImpl~graphql
+    config_tier: config.publish
+    allowedpaths:
+      - "/graphql/execute.json/headless-test/.*"
+      - "/content/_cq_graphql/headless-test/.*"
+    alloworigin: ["http://localhost:3000"]
+    alloworigin_note: >
+      PLACEHOLDER dev origin only. Per the AC, the Lead must add the real consumer origin
+      (e.g. https://app.example.com) before a browser-based consumer can call this endpoint
+      cross-origin. Deliberately an explicit allow-list array, NOT ".*" and NOT alloworiginregexp
+      (left as an empty array) — per US-006 and persisted-query-contracts.md § 7.
+    supportedmethods_field_used: allowedmethods   # GET, HEAD only
+    supportscredentials: false
+    existing_config_untouched: true
+    existing_config_verified:
+      path: ui.config/src/main/content/jcr_root/apps/headless-test/osgiconfig/config.author/com.adobe.granite.cors.impl.CORSPolicyImpl~headless-test.cfg.json
+      confirmed_scope: "/(content|conf)/headless-test.*"
+      confirmed_tier: config.author
+      confirmed_gap: >
+        Read directly — its allowedpaths regex `/(content|conf)/headless-test.*` matches neither
+        `/graphql/execute.json/headless-test/...` (starts with /graphql, not /content or /conf) nor
+        `/content/_cq_graphql/headless-test/...` (the literal segment is `_cq_graphql`, which the
+        regex `/(content|conf)/headless-test.*` does not match — it requires headless-test
+        immediately after content/conf). This confirms the gap named in the dispatch brief is real,
+        not speculative. File was read, not modified.
+    naming_collision_avoided: >
+      Named ~graphql (not ~headless-test-graphql or similar) to keep the two factory configs
+      visually and functionally distinct: ~headless-test is config.author-only and covers the
+      authoring/preview content tree; ~graphql is config.publish-only and covers only the delivery
+      surface. No PID collision (different ~name suffix), no tier collision (different config.*
+      directory).
+
+  - id: WB-08
+    task: "Negative configuration decisions — recorded here for the Program Agent to add to DECISIONS.md; NOT written directly into DECISIONS.md by me"
+    negative_decisions:
+      - id: NEG-1
+        decision: "No service user, no repoinit entry, no ServiceUserMapperImpl.amended.cfg.json for this run's GraphQL delivery surface."
+        reasoning: >
+          AD-5 (confirmed architecture, zero custom Java): there is no Sling Model, servlet, or any
+          Java code that needs a service-bound ResourceResolver. The Core CF/GraphQL delivery path
+          uses the requesting client's own (anonymous, on publish) resolver, not a service user.
+          DAM content under /content/dam/headless-test/chisel/ is anonymously readable on publish
+          per AEMaaCS defaults — no new ACL grant is required to make it so. Verified by reading the
+          existing RepositoryInitializer~headless-test.cfg.json: it contains only archetype-default
+          path/property setup for /content/dam/headless-test, no service-user or ACL script, and
+          I have added nothing to it (additive-only policy honored by making no edit at all).
+        repo_verification: >
+          Read ui.config/.../config/org.apache.sling.jcr.repoinit.RepositoryInitializer~headless-test.cfg.json
+          directly — confirms no service user / ACL script exists there today, and none was added.
+        recommended_DECISIONS.md_wording: >
+          "WB-08 (configsmith) — NO service user / repoinit entry added for the GraphQL delivery
+          surface. AD-5 (zero custom Java) means the Core CF/GraphQL servlet uses the requesting
+          client's own resolver, not a service-bound one; DAM content under
+          /content/dam/headless-test/chisel/ relies on AEMaaCS's default anonymous-read grant on
+          publish, not a new ACL. This is a recorded decision, not an omission — confirmed against
+          the existing RepositoryInitializer~headless-test.cfg.json, which was read and left
+          unmodified."
+
+      - id: NEG-2
+        decision: >
+          Did NOT ship com.adobe.cq.dam.cfm.graphql.cf.GraphQlServlet OSGi config on any tier.
+        reasoning: >
+          This PID has no ~name suffix, so it is instance-wide, not per-project. Shipping it would
+          set enable.get/enable.post/enable.ui for every team on a possibly-shared AEM instance —
+          a real risk of silently flipping another team's GraphiQL/POST settings, not a
+          hypothetical one. Adobe's per-tier defaults already disable ad-hoc POST + GraphiQL on
+          publish, which is the security posture this run needs (anonymous GET via persisted
+          queries only). Open as Q-001 in requirements.yaml for the Lead to confirm dedicated vs.
+          shared environment; until answered, the safe default (do not ship) applies.
+        repo_verification: >
+          Grepped ui.config/src for "GraphQlServlet" — zero matches. Confirms the singleton was
+          never introduced by any prior stage of this run, not merely that I chose not to add it.
+        recommended_DECISIONS.md_wording: >
+          "WB-08 (configsmith) — did NOT ship the instance-wide singleton OSGi config
+          com.adobe.cq.dam.cfm.graphql.cf.GraphQlServlet on any tier (config / config.author /
+          config.publish). It has no ~name suffix, so shipping it would set enable.get/post/ui for
+          the entire AEM instance, not just this project — verified absent from the repo by grep.
+          Open question Q-001 (dedicated vs. shared target environment) remains with the Lead;
+          the safe default (rely on Adobe's per-tier defaults) applies until answered."
+
+      - id: NEG-3
+        decision: "No dispatcher/ module scaffolded; no dispatcher or CDN cache-rule authored for /graphql/execute.json/*."
+        reasoning: >
+          The dispatcher/ module does not exist in this repo (confirmed by directory listing — no
+          top-level dispatcher folder). Scaffolding one from scratch is out of scope for this run
+          per Q-002's recorded default (rely on AEMaaCS CDN defaults). Cache-posture consequence,
+          stated explicitly rather than left as a silent gap: Sentinel (WB-16) will measure and
+          report the OBSERVED Cache-Control header on /graphql/execute.json/headless-test/... against
+          the real environment and treat a missing/absent header as a FINDING with a concrete
+          remediation recommendation (add a dispatcher module with a cache rule allowing
+          /graphql/execute.json/* and a Cache-Control response header, or an equivalent CDN rule in
+          cdn.yaml) — not as a silent pass and not as an automatic build failure.
+        repo_verification: >
+          Directory listing of the repo root confirms no dispatcher/ folder exists.
+        recommended_DECISIONS.md_wording: >
+          "WB-08 (configsmith) — no dispatcher/ module scaffolded this run (module absent from the
+          repo; confirmed by directory listing). Q-002's recorded default applies: rely on AEMaaCS
+          CDN defaults for /graphql/execute.json/*. Cache-posture consequence carried forward
+          explicitly to Sentinel (WB-16): the real environment's observed Cache-Control header on
+          the persisted-query execution path will be measured and, if absent, reported as a finding
+          with a concrete remediation (dispatcher module or CDN rule), not silently passed."
+
+    note_on_process: >
+      Per the dispatch brief's hard requirement, none of the three items above were written
+      directly into DECISIONS.md. All three are reported here, with recommended wording, for the
+      Program Agent to add under its own entry. This mirrors the process correction already
+      recorded in DECISIONS.md at 2026-08-25T18:30Z ("Specialists report findings and proposed
+      content back to the Program Agent... they do not write directly into DECISIONS.md").
+
+gate_self_check:
+  zero_high_severity_security_findings: pass    # no findings raised; nothing reviewed carries a finding
+  every_service_user_has_mapper_entry: "N/A — zero service users added this run (NEG-1)"
+  all_secrets_externalized: "N/A — no secret-bearing config authored (CORS config carries no secret)"
+  no_loginAdministrative_in_diff: pass           # no Java touched at all
+  dispatcher_validator_passed: "N/A — no dispatcher/ module in this repo (NEG-3); tracks_used excludes dispatcher"
+  no_deny_all_relaxed_without_reason: "N/A — no dispatcher filter rules touched"
+  cdn_cache_headers_honor_baseline: "Deferred to Sentinel (WB-16) observation — see NEG-3"
+  filter_rule_order_preserved: "N/A — no dispatcher filter rules touched"
+  additive_repoinit_only: pass    # RepositoryInitializer~headless-test.cfg.json read, not modified
+  existing_cors_config_untouched: pass   # CORSPolicyImpl~headless-test.cfg.json read, not modified
+
+open_questions:
+  - id: Q-001
+    statement: "Is the target real environment dedicated or shared? (carried from Strategist r04, unresolved)"
+    status: non-blocking, proceeds on recorded default (do not ship GraphQlServlet singleton)
+  - id: Q-002
+    statement: "Scaffold a dispatcher/ module for /graphql/execute.json/* allow + cache rules? (carried from Strategist r04, unresolved)"
+    status: non-blocking, proceeds on recorded default (rely on AEMaaCS CDN defaults; Sentinel reports observed Cache-Control)
+  - id: CS-OQ-01
+    statement: >
+      The real consumer origin for CORSPolicyImpl~graphql's alloworigin allow-list is not yet known
+      (only the localhost:3000 dev placeholder is present). This must be added by the Lead before a
+      browser-based consumer can call the endpoint cross-origin from its real domain — flagging so
+      it is not lost between now and the real-environment validation checkpoint (WB-15).
+    blocking: false
+    affects: [WB-15, real_environment_validation_approval]
+
+downstream_consumers:
+  - composer     # WB-12 needs the endpoint node to exist before persisted queries register ("No suitable endpoint found")
+  - auditron     # WB-13 verifies the built package contains both new filter roots + zero-manual-step deploy
+  - sentinel     # WB-16 measures observed Cache-Control per NEG-3; asserts CORS allowedpaths structurally per persisted-query-contracts.md § 7
+
+notes_for_program_agent:
+  - "WB-06, WB-07 are code/config complete. WB-08 is complete as a reporting task — three recommended DECISIONS.md entries are above (NEG-1, NEG-2, NEG-3) for you to add; I have not touched DECISIONS.md."
+  - "Filter.xml now has both new roots appended; existing roots are untouched, confirmed by reading the file back after the edit."
+  - "The CORS config's alloworigin is a placeholder (localhost:3000) by design — real origin addition is explicitly the Lead's follow-up (CS-OQ-01), not something I could resolve without knowing the consumer's real domain."
+  - "config.publish/ is a NEW directory under ui.config's osgiconfig tree (previously only config/ and config.author/ existed) — flagging in case this surprises a reviewer looking at the diff."
+  - "No PARENT_MATERIALIZATION_REQUIRED fallback was needed — all writes (endpoint node x2, filter.xml edit, CORS config, this handoff) succeeded directly under their intended paths."

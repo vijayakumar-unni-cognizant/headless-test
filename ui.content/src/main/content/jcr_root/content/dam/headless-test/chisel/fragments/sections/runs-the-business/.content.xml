@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:nt="http://www.jcp.org/jcr/nt/1.0"
+    xmlns:dam="http://www.day.com/dam/1.0"
+    xmlns:cq="http://www.day.com/jcr/cq/1.0"
+    jcr:primaryType="dam:Asset">
+    <jcr:content
+        jcr:primaryType="dam:AssetContent"
+        jcr:title="Software that runs the business for you."
+        contentFragment="{Boolean}true">
+        <data
+            jcr:primaryType="nt:unstructured"
+            cq:model="/conf/headless-test/settings/dam/cfm/models/content-section">
+            <master
+                jcr:primaryType="nt:unstructured"
+                heading="Software that runs the business for you."
+                body="&lt;p&gt;Chisel answers the calls, writes the invoices, and chases the payments — then hands you the day in a 60-second briefing. No forms. No subscriptions.&lt;/p&gt;"/>
+        </data>
+        <metadata jcr:primaryType="nt:unstructured"/>
+    </jcr:content>
+</jcr:root>

@@ -1,0 +1,61 @@
+query LandingPageByPath($path: String!) {
+  landingPageByPath(_path: $path) {
+    item {
+      slug
+      seoTitle
+      seoDescription { html }
+      hero {
+        ... on HeroModel {
+          title
+          eyebrow
+          summary { html }
+          heroImage {
+            ... on ImageRef { _path width height }
+            ... on DocumentRef { _path }
+          }
+          heroImageAlt
+          ctaLabel
+          ctaPath
+          _path
+        }
+      }
+      stats {
+        ... on StatModel {
+          value
+          label
+          detail
+          _path
+        }
+      }
+      sections {
+        ... on ContentSectionModel {
+          heading
+          body { html }
+          anchorId
+          sectionImage {
+            ... on ImageRef { _path width height }
+            ... on DocumentRef { _path }
+          }
+          sectionImageAlt
+          _path
+        }
+      }
+      pillars {
+        ... on PillarModel {
+          title
+          description { html }
+          category
+          linkLabel
+          linkPath
+          image {
+            ... on ImageRef { _path width height }
+            ... on DocumentRef { _path }
+          }
+          imageAlt
+          _path
+        }
+      }
+      _path
+    }
+  }
+}

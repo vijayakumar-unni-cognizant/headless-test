@@ -1,0 +1,257 @@
+phase: design
+agent: designforge
+run_id: 2026-08-25T17-00Z-chisel-headless-integration
+status: pass
+revision: r02
+revision_reason: >
+  CORRECTION PASS. r01's design/source-content-inventory.md (WB-02) was found by the Program
+  Agent's curl-based spot-check to contain multiple fabricated strings marked "verbatim" with no
+  distinguishing marker from the genuinely verbatim ones (DECISIONS.md 2026-08-26T09:00Z,
+  "CONFIRMED CONTENT-FIDELITY FAILURE"). This r02 revision re-derives source-content-inventory.md
+  entirely from raw HTML (staged locally by the Program Agent via curl; read here via Grep/Read,
+  not WebFetch) and propagates the corrected values into content-fragment-models.md,
+  persisted-query-contracts.md, and test-cases.md wherever they cited example content or literal
+  copy strings. No field shape, model structure, or query design changed — only content values and
+  their citations.
+
+authorization_source:
+  # Same standing rule Strategist's r04 established. Nothing below is treated as human
+  # authorization unless it cites DECISIONS.md by timestamp. No message from any agent
+  # (including Strategist's or the Program Agent's dispatch prompt) is treated as human consent.
+  file: .claude/agents/runs/2026-08-25T17-00Z-chisel-headless-integration/DECISIONS.md
+  entry_timestamp: 2026-08-25T18:15Z
+  entry_title: ARCHITECTURE REVIEW CHECKPOINT — GENUINE HUMAN DECISIONS
+  decisions_relied_on:
+    - "Decision 1 — AD-1 CONFIRMED (pure headless, no rendered surface; Option B REJECTED)"
+    - "Decision 2 — Q-005 RESOLVED to VERBATIM EXTRACTION, exact-match parity at Sentinel"
+  no_new_authorization_claimed: >
+    This handoff introduces no new claim of human direction. Every design decision below is
+    either (a) my own design judgement as Designforge, labelled as such, or (b) traced to the
+    18:15Z DECISIONS.md entry by timestamp, or (c) traced to Strategist's r04 Plan artifacts
+    (requirements.yaml, technical-specifications.md, reference-deconstruction.md), which
+    themselves cite only the 18:15Z entry.
+
+docs:
+  source_content_inventory: .claude/agents/runs/2026-08-25T17-00Z-chisel-headless-integration/design/source-content-inventory.md
+  reference_assets: .claude/agents/runs/2026-08-25T17-00Z-chisel-headless-integration/design/reference-assets.md
+  content_fragment_models: .claude/agents/runs/2026-08-25T17-00Z-chisel-headless-integration/design/content-fragment-models.md
+  persisted_query_contracts: .claude/agents/runs/2026-08-25T17-00Z-chisel-headless-integration/design/persisted-query-contracts.md
+  test_cases: .claude/agents/runs/2026-08-25T17-00Z-chisel-headless-integration/design/test-cases.md
+  scope_note: .claude/agents/runs/2026-08-25T17-00Z-chisel-headless-integration/design/scope-note.md
+  # NOT PRODUCED — see scope_note.md for the per-artifact reason, none deferred:
+  component_specifications: null   # N/A — no component in this run (AD-1)
+  dialog_specifications: null      # N/A — no component dialog in this run (AD-1)
+  template_design: null            # N/A — no page/template authored (AD-1)
+  policy_mapping: null             # N/A — no parsys/template (AD-1)
+  authoring_guidelines: null       # N/A in its normal shape — folded into content_fragment_models + source_content_inventory § 9
+  functional_test_cases: null      # substituted by test_cases.md
+  ui_test_scenarios: null          # substituted by test_cases.md § 10 (per-track N/A carried forward)
+
+parent_materialization_required: []
+# ^ EMPTY. All 6 files above were written successfully directly under
+#   runs/2026-08-25T17-00Z-chisel-headless-integration/design/ — no Write denial occurred,
+#   so no PARENT_MATERIALIZATION_REQUIRED fallback was needed this run.
+
+cf_models_specified:
+  - name: hero
+    fields: [title, eyebrow, summary, heroImage, heroImageAlt, ctaLabel, ctaPath]
+    required_fields: [title, summary]
+    graphql_type: HeroModel
+  - name: stat
+    fields: [value, label, detail]
+    required_fields: [value, label]
+    graphql_type: StatModel
+  - name: pillar
+    fields: [title, description, category, linkLabel, linkPath, image, imageAlt]
+    required_fields: [title]
+    graphql_type: PillarModel
+    category_enum: [capital, technology, community, offering, partnership, approach, product, differentiator, role, film]
+  - name: content-section
+    fields: [heading, body, anchorId, sectionImage, sectionImageAlt]
+    required_fields: [heading, body]
+    graphql_type: ContentSectionModel
+  - name: landing-page
+    fields: [slug, seoTitle, seoDescription, hero, stats, sections, pillars]
+    required_fields: [slug, seoTitle]
+    graphql_type: LandingPageModel
+    multi_valued_reference_option: B   # string/reference[], single-picker, per AD-4 — Option A cannot be hand-authored in JCR
+
+persisted_queries_specified:
+  - name: landing-page-by-path
+    isolation_scope: inherently_scoped_by_path_and_reference_traversal
+    primary: true
+  - name: hero-by-path
+    isolation_scope: inherently_scoped_by_path
+  - name: stats-list
+    isolation_scope: path_filtered_starts_with_chisel_root
+  - name: pillars-list
+    isolation_scope: path_filtered_starts_with_chisel_root
+
+components_specified: []      # none exist — see scope_note.md § 1
+templates_specified: []       # none exist — see scope_note.md § 3
+policies_specified: []        # none exist — see scope_note.md § 4
+
+traceability:
+  requirements_to_test_cases:
+    - { requirement_id: US-001, test_case_ids: [TC-027, TC-028, TC-029] }
+    - { requirement_id: US-002, test_case_ids: [TC-033] }
+    - { requirement_id: US-003, test_case_ids: [TC-002, TC-003, TC-004, TC-005, TC-006, TC-024, TC-030, TC-031] }
+    - { requirement_id: US-004, test_case_ids: [TC-011, TC-012, TC-013, TC-014, TC-015, TC-016, TC-017, TC-032] }
+    - { requirement_id: US-005, test_case_ids: [TC-001, TC-004, TC-005, TC-006, TC-034] }
+    - { requirement_id: US-006, test_case_ids: [], note: "No TC IDs allocated — CORS reachability is asserted structurally in design/persisted-query-contracts.md § 7 (the allowed-paths + origin allow-list the config must carry). The actual cross-origin browser check is out of scope under AD-1 because no browser-based consumer exists in this repo to originate a cross-origin request. This is the one requirement in this run with zero allocated TC IDs; it is stated explicitly here, not left as a bare 'covered elsewhere' row." }
+    - { requirement_id: US-007, test_case_ids: [TC-019, TC-020, TC-021, TC-022] }
+    - { requirement_id: US-010, test_case_ids: [TC-001, TC-002, TC-003, TC-007, TC-025, TC-026] }
+    - { requirement_id: US-011, test_case_ids: [TC-005, TC-006, TC-008, TC-009, TC-010] }
+    - { requirement_id: US-012, test_case_ids: [], note: "No TC IDs allocated — US-012 (built-package filter coverage, mode=merge re-seed caveat) is Auditron's build-validation surface (WB-13), not a payload/contract assertion. Not traced to this document per technical-specifications.md § 11.2's own requirement-to-work-breakdown table, which assigns US-012 to WB-06/WB-13 only." }
+    - { requirement_id: US-013, test_case_ids: [TC-023] }
+    - { requirement_id: US-014, test_case_ids: [], note: "No TC IDs allocated — US-014 (written delivery contract) is satisfied by design/persisted-query-contracts.md itself as a document, not by an executable test case. Traced to WB-02/WB-04 per technical-specifications.md § 11.2, not WB-05." }
+  # US-008, US-009 excluded — descoped under AD-1, not active requirements this run.
+
+ui_test_coverage: []
+# ^ No UI journeys exist in this run (AD-1). See scope_note.md § 7 — folded into test_cases.md § 10
+#   (per-track N/A table) rather than a UI-journey coverage list.
+
+open_questions_for_program_agent:
+  - id: DF-OQ-01
+    status: RESOLVED (r02) — no longer an open question about whether verification is needed; per-item
+      outcome is now recorded directly in source-content-inventory.md § 0/§§ 2-5.
+    statement: >
+      r01 raised this as an open question because WebFetch pipes HTML through a secondary model and
+      I could not independently verify byte-exactness. That risk MATERIALIZED: the Program Agent's
+      curl-based spot-check (DECISIONS.md 2026-08-26T09:00Z) found multiple r01 items were not
+      character-level drift but entire fabricated sentences (e.g. SC-HOME-001's claimed page title,
+      SC-HOME-002's claimed hero summary — neither exists anywhere in the raw HTML). For this r02
+      revision, the Program Agent staged raw HTML for all 4 pages locally; I re-derived every one of
+      the 94 items directly from those files using Grep/Read (no WebFetch call made in this pass).
+    outcome: >
+      Of 81 in-scope items: 67 now `verbatim (source-confirmed)` against raw HTML (either r01 was
+      already right, or I substituted the real value I found at that position), 12 `partial`
+      (mixed field-level confirmation — concentrated in the /platform Virtual Back Office role
+      roster, where only the default-rendered tab's long description is in the static HTML), 2 fully
+      `UNCERTAIN` (SC-PLAT-003, SC-PLAT-004 — no matching content found anywhere; do not author).
+      Full per-item detail in source-content-inventory.md §§ 2-5; aggregate accounting in § 0.3.
+    blocking: false
+    affects: [WB-11, WB-16, US-003, US-010]
+  - id: DF-OQ-02
+    status: PARTIALLY RESOLVED (r02) — both r01 UNCERTAIN items are now resolved with direct evidence;
+      new UNCERTAIN items were found elsewhere and are listed in DF-OQ-04 below, not silently added
+      to this one.
+    statement: >
+      r01 flagged two items as UNCERTAIN. (a) /platform's Ridge/Sentry linkPath (SC-PLAT-036/037):
+      RESOLVED — re-verification confirms these cards render as non-clickable <div>s, not <a> links,
+      on the live page. This is now a confirmed fact (no link exists), not a pending re-verification;
+      do not author a linkPath for either. (b) /community's page metadata (SC-COMM-013): RESOLVED —
+      canonicalUrl, publisher, and lastUpdated are all directly confirmable via <link rel="canonical">
+      and this page's own JSON-LD Organization/WebPage blocks. r01's "not returned by either fetch
+      pass" was itself a WebFetch-pipeline gap (the JSON-LD block was apparently dropped in
+      markdown conversion for this page specifically), not a genuine absence on the page.
+    recommendation: >
+      Composer may now author SC-COMM-013 in full (all fields have direct evidence) and should
+      author SC-PLAT-036/037's linkPath as empty/absent as a confirmed fact, not a caveat.
+    blocking: false
+    affects: [WB-11, US-003]
+  - id: DF-OQ-03
+    status: SUPERSEDED (r02) — the underlying premise no longer holds; see replacement below.
+    statement: >
+      r01 asked Composer to choose between two authoring options for the home page's "connective
+      idea" paragraph (SC-HOME-010). Re-verification found NO "connective idea" heading or paragraph
+      exists anywhere in the raw HTML — the entire premise of this question (that this text exists
+      and only its heading-boundary is ambiguous) was itself part of the confirmed fabrication. The
+      real content at this position in the page (§ 2 of the corrected inventory) is a genuine h2,
+      "We invest in trades businesses.", with its own real body text — there is no heading-boundary
+      ambiguity to resolve because the heading is not inferred, it is a literal on-page string.
+    recommendation: Superseded — author SC-HOME-010 per its corrected value directly; no choice needed.
+    blocking: false
+    affects: [WB-11]
+  - id: DF-OQ-04
+    statement: >
+      NEW (r02). Two categories of genuine ambiguity were found during re-verification that did not
+      exist in r01 (because r01's fabricated values papered over them): (a) two non-identical REAL
+      candidate strings exist for `landing-page.seoDescription` on the home page (SC-HOME-003 vs.
+      SC-HOME-003b — JSON-LD WebSite.description vs. og:description) and for the /platform "operational
+      note" content-section (SC-PLAT-026 — a COO-panel closing line vs. a separate "Safety rails &
+      observability" card, worded differently); (b) 9 of the 10 Virtual Back Office role-roster
+      long-form descriptions (SC-PLAT-017..025) have no confirmed source at all — only their title
+      and short parenthetical label are confirmed; the long description text is not present anywhere
+      in the static HTML (likely client-hydrated from a JS data structure this fetch did not capture).
+    recommendation: >
+      For (a), Composer picks one candidate per field and records the choice in DECISIONS.md before
+      authoring — do not merge two real strings into a third, blended paraphrase (this is exactly the
+      pattern that produced SC-PLAT-026's original fabrication). For (b), author only title + short
+      label for the 9 unconfirmed roles and leave the long description empty, or hold those 9
+      fragments pending a further fetch capable of capturing client-hydrated content.
+    blocking: false
+    affects: [WB-11, US-003]
+
+gates:
+  dialog_spec_confirmed:
+    applicable: false
+    reason: "No component dialog exists in this run (AD-1) — see design/scope-note.md § 2. Vacuously satisfied, not skipped."
+  least_privilege_policies:
+    applicable: false
+    reason: "No template/parsys policy exists in this run (AD-1) — see design/scope-note.md § 4. The query-isolation analogue (no unfiltered <model>List) IS enforced — design/persisted-query-contracts.md § 0 rule 5 — and is the substantive equivalent."
+  all_requirements_have_test_cases_or_reasoned_exception: true
+  # ^ See traceability.requirements_to_test_cases — US-006/US-012/US-014 each carry an explicit
+  #   zero-allocation reason with a pointer to where they ARE covered, per the "cross-reference
+  #   retires only the IDs it names" rule; no bare "covered elsewhere" row exists.
+  id_index_gate: true
+  # ^ design/test-cases.md opens with `ids: prefix=TC count=34 TC-001..TC-034 (no gaps)`, verified
+  #   against the actual 34 TC rows in the body (§§ 1-9). Every TC carries executor: sentinel and
+  #   a tier (Publish/Author).
+  ui_test_coverage_gate:
+    applicable: false
+    reason: "No visual/user-journey requirement exists in this run (AD-1) — see design/scope-note.md § 7. design/test-cases.md § 10 carries the per-track N/A table forward instead."
+  reference_manifest_gate: true
+  # ^ design/reference-assets.md exists; both PNG absolute source paths + the reference URL are
+  #   listed; sources: present (not none); no invented visual attribute.
+  source_content_inventory_gate: true
+  # ^ REVISED r02. design/source-content-inventory.md was found NOT to satisfy this gate at r01
+  #   (DECISIONS.md 2026-08-26T09:00Z) despite passing the mechanical ID-index/enumeration checks —
+  #   several enumerated items were fabricated, not merely unverified. r02 re-derives the document
+  #   entirely from raw HTML (staged by the Program Agent via curl; read here via Grep/Read, never
+  #   WebFetch). Per-item outcome: 67/81 in-scope items verbatim (source-confirmed) against raw HTML,
+  #   12/81 partial (mixed field-level confirmation), 2/81 (SC-PLAT-003, SC-PLAT-004) fully
+  #   UNCERTAIN with no source found anywhere — explicitly marked "do not author," not filled.
+  #   Every countable set was re-enumerated against raw HTML, not re-asserted from the r01 count:
+  #   all 3 home hero-strip pillars, all 6 capital "offers owners" items, all 3 "ways to partner",
+  #   all 3 "the approach", the (corrected) 4 platform stats + 3 home stats (7 total, not 9 — 003/004
+  #   have no source), all 5 "the stack" modules, all 10 agent-roster titles+labels (10 long
+  #   descriptions only 1/10 confirmed), all 4 "what the AI produces", all 4 "how it is different",
+  #   all 3 "products by trade", all 3 community "commitments", all 4 "how the investment works",
+  #   both operator films (now with their real narrative body text added), all page-metadata fields
+  #   (community's are now fully confirmed, correcting r01's blanket UNCERTAIN). This gate is marked
+  #   true because the r02 document is honest about its own confidence per item, not because every
+  #   item is now confirmed — 2 items remain genuinely unsourced and are marked as such.
+  content_mapping_gate: true
+  # ^ REVISED r02. design/content-fragment-models.md §§ 1.1, 2.1, 3.1, 4.1, 5.1 were each edited to
+  #   cite the corrected source-content-inventory.md values in place of the r01 fabricated ones
+  #   (hero.title/eyebrow/summary/ctaLabel/ctaPath for all 4 pages; the SC-PLAT-003/004 stat rows
+  #   struck through as unsourced; the pillar "product"/"role"/"film" category rows corrected for
+  #   linkPath-absence and long-description-partial-confirmation; every content-section row's
+  #   heading+body replaced with its real on-page counterpart; landing-page seoTitle/seoDescription
+  #   corrected per page). design/persisted-query-contracts.md's example JSON responses (§§ 1-2) were
+  #   rewritten wholesale to use corrected values. design/test-cases.md's TC-002/TC-005 expected-result
+  #   cells were updated in place. Every reference-sourced field still names its exact source value
+  #   AND its rendered role in the consumer — including the swap hazard (hero.summary vs
+  #   landing-page.seoDescription) which is now stated against corrected strings, and a NEW swap-hazard
+  #   note added for the two non-identical real seoDescription/operational-note candidates (DF-OQ-04).
+  no_deferral_gate: true
+  # ^ design/scope-note.md explicitly frames every N/A as a standing architectural fact (AD-1), not
+  #   a deferral; no artifact in this design pack states or implies a downstream stage is skipped.
+  no_code_gate: true
+  # ^ Only .md files written under design/. No .java/.html/.xml/.scss/.json/.js produced.
+
+downstream_consumers:
+  - composer      # consumes content_fragment_models.md + source_content_inventory.md + reference_assets.md (WB-09, WB-10, WB-11, WB-12)
+  - configsmith   # consumes persisted_query_contracts.md § 7 (CORS origin note) + technical-specifications.md (WB-06, WB-07, WB-08)
+  - auditron      # consumes technical-specifications.md § 11 WB-13 AC directly; test_cases.md § 9 documents the overlap with its own local-build checks without duplicating ownership
+  - sentinel      # consumes test_cases.md (its executable gate definition) + source_content_inventory.md (exact-match reference set) + persisted_query_contracts.md (query text + example responses) + reference_assets.md (asset provenance)
+  # blockwright, bridgesmith — NOT scheduled this run (AD-1, confirmed) — no artifact here is for them.
+
+notes_for_program_agent:
+  - "r02 CORRECTION PASS. All 6 design artifacts were re-checked; 4 were edited in place (source-content-inventory.md rewritten wholesale, content-fragment-models.md / persisted-query-contracts.md / test-cases.md edited at the specific rows citing content). reference-assets.md and scope-note.md were not touched — the fidelity failure was specific to page-copy extraction and did not implicate them."
+  - "All edits written successfully — no PARENT_MATERIALIZATION_REQUIRED fallback was needed for this correction pass either."
+  - "DF-OQ-01 is now RESOLVED, not open: the r01 risk it flagged (WebFetch-mediated fabrication) materialized exactly as feared, was confirmed by the Program Agent's curl spot-check, and is now corrected per-item with a raw-HTML citation or an explicit UNCERTAIN marking — see source-content-inventory.md § 0.3 for the aggregate count (67 confirmed / 12 partial / 2 uncertain of 81 in-scope items)."
+  - "DF-OQ-02 is RESOLVED (both r01 UNCERTAIN items now have direct evidence, one way or the other). DF-OQ-03 is SUPERSEDED (its premise — that fabricated text existed with only a heading-boundary ambiguity — was itself part of the fabrication). DF-OQ-04 is NEW, raised by this correction pass, and covers the 2 categories of genuine ambiguity found only once real content replaced the fabricated placeholders."
+  - "No new claim of human authorization is made anywhere in this handoff or its referenced documents, in either the r01 or r02 content. Every human-decision statement cites DECISIONS.md 2026-08-25T18:15Z by timestamp; the content-fidelity finding itself cites DECISIONS.md 2026-08-26T09:00Z; everything else is labelled as my own design judgement or my own re-verification work in this pass."
+  - "Ready to resume dispatch of configsmith (WB-06/07/08) and composer (WB-09..WB-12) now that WB-02/WB-03/WB-04/WB-05 carry corrected content — composer in particular should re-pull all 4 corrected documents rather than relying on any cached r01 copy."
