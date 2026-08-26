@@ -8,11 +8,13 @@
 - Coverage matrix: `test/sentinel/coverage-matrix.md`
 - Evidence root: `test/sentinel/evidence/`
 - Generated: `2026-08-26T15:12:28Z`
-- Terminal status: `fail`
+- Sentinel status: `fail`
+- Program-Agent P10 remediation checkpoint: `remediation_declined`
+- ADLC terminal status: `fail (accepted gap)`
 
 ## Verdict
 
-Sentinel status is `fail`.
+Sentinel status is `fail`. This is the terminal Sentinel acceptance verdict. The Program Agent P10 checkpoint was later satisfied by human remediation decline, so the ADLC run closes as `fail (accepted gap)`.
 
 The primary GraphQL delivery contract passed on both real tiers: all 4 persisted queries returned HTTP 200 with no GraphQL errors, the multiline rich-text delivery fix survived FileVault deployment, content parity on reachable Publish payloads is exact, Author provisioning is intact, and both DAM binaries are present and delivery-resolvable.
 
@@ -233,4 +235,4 @@ These rows are recorded individually, not as a blanket visual/UI N/A. AD-1 is th
 
 ## Closeout
 
-Sentinel completed the real-environment coverage ledger with archived evidence and no additional live probing during this continuation. The final ADLC handoff is `handoffs/sentinel.yaml`.
+Sentinel completed the real-environment coverage ledger with archived evidence and no additional live probing during this continuation. The Sentinel stage handoff is `handoffs/sentinel.yaml`. The Program Agent subsequently recorded remediation declined in `DECISIONS.md`; no fix routing is authorized in this run.

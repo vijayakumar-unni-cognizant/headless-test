@@ -865,3 +865,40 @@ not evidence either way). Sentinel is instructed to verify independently, not tr
 evidence for its own tracks.
 
 ---
+
+2026-08-26T15:23Z - PROGRAM-AGENT SENTINEL-FAILURE SPOT-CHECK - P10 prerequisite
+- **Reason.** `handoffs/sentinel.yaml` reports `status: fail` with a critical CORS finding,
+  `SENT-CORS-01`. Per `.claude/agents/aem-program-agent.md` P10, before surfacing a critical/high
+  Sentinel finding at the remediation checkpoint, the Program Agent must re-execute at least one
+  decisive probe itself and record the observed status/body excerpt here.
+- **Probe.** Anonymous Publish request with a real third-party Origin header and cache-busting:
+  `GET https://publish-p185256-e1945105.adobeaemcloud.com/graphql/execute.json/headless-test/stats-list?program-agent-cors-spotcheck=20260826T1515Z`
+  with `Origin: https://example-consumer.test`.
+- **Observed result.** `HTTP/1.1 204 No Content`; `cache-control: no-cache`; `X-Cache: MISS`;
+  `X-Served-By: cache-del-vibw2260021-DEL`; downloaded body size `0`; content type empty.
+- **Decision impact.** The spot-check independently reproduces the Sentinel critical CORS finding.
+ The Program Agent may now present the Sentinel remediation checkpoint to the human. No remediation
+  is authorized by this entry; it is evidence only.
+
+---
+
+2026-08-26T15:31Z - SENTINEL REMEDIATION DECLINED - P10 checkpoint satisfied
+- **Human decision.** The session user declined remediation after Sentinel returned `status: fail` and
+  the Program Agent presented the P10 options. User response: "Decline Remediation".
+- **Findings accepted as known gaps, not fixed in this cycle:**
+  - `SENT-CORS-01` - critical correctness finding. Publish GraphQL delivery with any `Origin`
+    header returns `HTTP 204 No Content` with zero bytes on cache miss, and cache hits still omit
+    `access-control-allow-origin`. Program Agent spot-check above independently reproduced it.
+  - `AUD-CONTENT-01` - medium correctness finding. `sections/bolt`, the only carrier of
+    `home-movement.png`, is not wired into `home.sections`, blocking TC-012 and TC-016.
+  - `GQL-SPEC-01` - low test-spec defect. TC-024's all-6-pillars clause belongs to `pillars-list`,
+    not `landing-page-by-path`.
+  - `POM-PORT-OBS` - low/info local-build observation. `pom.xml` carries `<aem.port>4506</aem.port>`.
+- **Routing decision.** No remediation is authorized. Do not re-dispatch Configsmith, Bridgesmith,
+  Composer, Designforge, Auditron, Pilot, or Sentinel for these findings in this run.
+- **Terminal status.** Per P10.7, because correctness-class defects are accepted/deferred, this ADLC
+  run closes as `fail (accepted gap)`, never as `pass` or degraded pass.
+- **Next action.** Generate the final Program Agent reports under `reports/` and emit the final
+  human handoff packet.
+
+---

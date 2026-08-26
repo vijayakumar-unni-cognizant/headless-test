@@ -3,7 +3,11 @@ agent: sentinel
 run_id: 2026-08-25T17-00Z-chisel-headless-integration
 adlc_stage: post-deploy
 status: fail
+adlc_terminal_status: "fail (accepted gap)"
 adlc_run_terminal: true
+sentinel_stage_terminal: true
+p10_remediation_checkpoint: remediation_declined
+p10_decision_record: .claude/agents/runs/2026-08-25T17-00Z-chisel-headless-integration/DECISIONS.md
 timestamp: 2026-08-26T15:12:28Z
 
 dispatch:
@@ -171,13 +175,14 @@ ad1_not_applicable_tracks:
 
 process_notes:
   - "Did not re-run mvn; the mvn ledger is closed at 3 of 3."
-  - "Did not write to DECISIONS.md."
+  - "Sentinel continuation did not write to DECISIONS.md; the Program Agent later appended the P10 spot-check and remediation-declined decision."
   - "Did not persist bearer token or credential material."
   - "Did not re-run live AEM checks during continuation; archived evidence was used as instructed."
-  - "reports/tokens.json was left unchanged."
+  - "After human declined remediation, the run closes as fail (accepted gap)."
 
 next_actor: program_agent
 recommended_program_agent_entries:
   - "Record SENT-CORS-01 as new critical delivery blocker, superseding/extending AUD-INFO-01."
   - "Carry AUD-CONTENT-01 forward as open, blocking TC-012 and TC-016 only."
   - "Route GQL-SPEC-01 to Designforge as a test-spec correction."
+  - "P10 Sentinel remediation checkpoint satisfied by human decline; no fix routing is authorized in this run."

@@ -101,13 +101,15 @@
       <span><strong>Run</strong> 2026-08-25T17-00Z-chisel-headless-integration</span>
       <span><strong>Generated</strong> 2026-08-26T15:12:28Z</span>
       <span><strong>Source</strong> sentinel-report.md</span>
+      <span><strong>P10 checkpoint</strong> remediation_declined</span>
+      <span><strong>ADLC terminal status</strong> fail (accepted gap)</span>
     </div>
   </header>
 
   <section>
     <h2>Verdict</h2>
     <div class="callout">
-      Terminal status is <code>fail</code>. The primary GraphQL delivery contract passed, but one new critical CORS delivery defect and one carried-forward content wiring blocker remain open.
+      Sentinel status is <code>fail</code>. This is the terminal Sentinel acceptance verdict. The Program Agent P10 checkpoint was later satisfied by human remediation decline, so the ADLC run closes as <code>fail (accepted gap)</code>.
     </div>
     <p>All 4 persisted queries returned HTTP 200 with no GraphQL errors on both real tiers. The multiline rich-text fix and the <code>landing-page.hero</code> schema fix survived FileVault deployment. Publish content parity passed for all reachable payloads, Author provisioning passed, and both DAM binaries are present and delivery-resolvable.</p>
   </section>
