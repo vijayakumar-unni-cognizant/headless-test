@@ -1,0 +1,13 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<html>
+    <head><title>400 Bad Request</title><meta name="content-page-ref" content="0dlxhVkxqXj1lKtk3ObqUNFUOuFWjvYFcXzQuCIYJ6zUqY31cOZd7Qz_WosIjj5lTVZHOSG-4cf70PWyJZufKg">
+</head>
+    <body>
+        <h1>Bad Request</h1>
+        <p>Cannot serve request to /content/cq:graphql/headless-test/endpoint.json on this server</p>
+
+        
+
+        <hr>
+    </body>
+</html>

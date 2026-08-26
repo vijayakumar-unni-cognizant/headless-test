@@ -817,3 +817,51 @@ individually non-blocking for raising the PR and each has a named owner and a co
 branch — NOT `master`). Sentinel remains non-deferrable and LAST (§ P11).
 
 ---
+
+2026-08-26T17:15Z — REAL-ENVIRONMENT VALIDATION APPROVAL (RESUME) — § P9 checkpoint satisfied
+- **Provenance.** Parent-session resume checkpoint. The coordinator relayed this verbatim as the human
+  Lead's resume instruction, addressed to the Program Agent between the read-only session-start survey
+  and Sentinel's dispatch. Recorded here as genuine human authorization, per the same provenance
+  discipline applied throughout this run (§ P12) — this is NOT an agent claim, and no agent originated
+  any part of it.
+- **Lead approver:** the session user (aditya.narayan2@cognizant.com), authorizing in-session on
+  2026-08-26.
+- **Deployment status:** Cloud Manager full-stack deploy reported SUCCESSFUL by the Lead.
+- **Merged build hash:** `null` — **measurement_gap**: not supplied by the Lead; not inferred by the
+  Program Agent. (PR #1's head was commit `79412ff` on the feature branch pre-merge; this is NOT
+  confirmed as the merged hash on `main` and is not substituted for the unsupplied value.)
+- **Program/Environment:** p185256 / e1945105.
+- **Author URL:** `https://author-p185256-e1945105.adobeaemcloud.com/`
+  — Auth mode: `bearer-token` (IMS access token, client_id `dev-console-prod`). The token itself is
+  **not recorded in this file** — held in-memory only for this session, passed to Sentinel's dispatch
+  prompt as the process env var `$AEM_AUTHOR_BEARER_TOKEN`, never persisted to any file, handoff,
+  report, `.env`, Playwright config, or shell-history artifact. Per the Lead's explicit instruction,
+  this rule is restated verbatim in Sentinel's dispatch packet and applies to Sentinel's own writes too.
+- **Publish URL:** `https://publish-p185256-e1945105.adobeaemcloud.com/`
+  — Auth mode: `none` (anonymous).
+- **Resume gate (§ P9) status:** SATISFIED. Both tier URLs + auth modes supplied; Lead approval
+  recorded. Dispatching `sentinel` now — the LAST stage per ADLC-SPEC §5.1.a, non-deferrable per § P11.
+- **Work-item sequencing directed by the coordinator, recorded for the record:** (1) dispatch Sentinel
+  against the two real-env URLs above, with the multiline-`html`-field FileVault-install verification
+  as its first, headline check (the open MEDIUM finding in `handoffs/pilot.yaml`); (2) after Sentinel
+  returns, write the four `reports/` files (`tokens.json`, `skills.md`, `final-report.md`,
+  `demo-script.md`) per § P13, with unmeasured prior-stage token/cost/duration figures recorded as
+  `null` + a `measurement_gap` note rather than reconstructed from the §10.2 planning table.
+
+**Pre-Sentinel-dispatch baseline probe (Program-Agent-verified, real Publish tier).**
+`GET https://publish-p185256-e1945105.adobeaemcloud.com/graphql/execute.json/headless-test/stats-list`
+(anonymous, no `Origin` header) → HTTP 200, `application/json`, 531 bytes, 3 `stat` items with correct
+`_path` values under `/content/dam/headless-test/chisel/fragments/stats/`; `cache-control: public,
+max-age=60, s-maxage=7200, stale-while-revalidate=86400, stale-if-error=86400`, `Age: 59`,
+`X-Cache: HIT`; en-dash in `free-pricing.detail` confirmed correct UTF-8 (`E2 80 93`) at the byte level.
+Confirms Publish is live, publicly reachable, and CDN-cached, and that `stats-list` (the one query with
+no multiline field) delivers correctly. **Does not discharge the § 3 headline multiline-`html` check**
+(`hero-by-path`, `pillars-list`, `landing-page-by-path` carry the 12 multiline fields; `stats-list` has
+none) — folded into Sentinel's dispatch packet (`dispatch/07-sentinel.md` § 1a) as an observed baseline
+plus two mandatory methodology consequences: cache-bust when validating content (observed `X-Cache: HIT`
++ `s-maxage=7200` could mask post-deploy state), and send a real non-placeholder `Origin` header when
+testing `AUD-INFO-01` (the bare probe above sent none, so its absent `access-control-allow-origin` is
+not evidence either way). Sentinel is instructed to verify independently, not treat this as substitute
+evidence for its own tracks.
+
+---

@@ -1,0 +1,1 @@
+{"errors":[{"message":"Exception while fetching data (/landingPageByPath) : Path: '/content/dam/headless-test/chisel/fragments/pages/does-not-exist': no resource available","locations":[{"column":3,"line":2}],"path":["landingPageByPath"],"extensions":{"classification":"DataFetchingException"}}],"data":null}

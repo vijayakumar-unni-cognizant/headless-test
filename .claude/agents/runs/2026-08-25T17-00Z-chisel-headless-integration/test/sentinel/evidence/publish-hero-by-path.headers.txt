@@ -1,0 +1,18 @@
+HTTP/1.1 200 OK
+Connection: keep-alive
+Content-Length: 593
+cache-control: public, max-age=60, s-maxage=7200, stale-while-revalidate=86400, stale-if-error=86400
+content-type: application/json
+x-frame-options: SAMEORIGIN
+x-sky-isauth: 0
+x-vhost: publish
+X-Content-Type-Options: nosniff
+Accept-Ranges: bytes
+Age: 0
+Date: Wed, 26 Aug 2026 13:35:43 GMT
+Strict-Transport-Security: max-age=31557600
+set-cookie: affinity="75a44a56f0997c81"; Path=/; HttpOnly; secure
+X-Served-By: cache-del-vibw2260026-DEL
+X-Cache: MISS
+X-Timer: S1787751343.329155,VS0,VS0,VE112
+

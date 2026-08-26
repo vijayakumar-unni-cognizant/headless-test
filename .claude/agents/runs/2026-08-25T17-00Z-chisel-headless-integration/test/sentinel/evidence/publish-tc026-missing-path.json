@@ -1,0 +1,1 @@
+{"errors":[{"message":"Variable 'path' has an invalid value: Variable 'path' has coerced Null value for NonNull type 'String!'","locations":[{"column":25,"line":1}],"extensions":{"classification":"ValidationError"}}]}

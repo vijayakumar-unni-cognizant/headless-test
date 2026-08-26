@@ -1,0 +1,20 @@
+HTTP/1.1 200 OK
+Connection: keep-alive
+cache-control: public, max-age=60, s-maxage=60, stale-while-revalidate=86400, stale-if-error=86400
+content-type: application/json
+expires: Thu, 01 Jan 1970 00:00:00 GMT
+set-cookie: login-token=login%3aeyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ2aWpheWFrdW1hci51bm5pQGNvZ25pemFudC5jb20iLCJleHAiOjE3ODc3OTQ1MzQsImlhdCI6MTc4Nzc1MTMzNCwic2NvcGUiOiJsb2dpbiJ9.obocT7ec2z7jCAklnqCFdjmfgap_ghfzr_3UCJb4byg%3acrx.default; Path=/; HttpOnly; Secure; SameSite=Lax
+set-cookie: uinfo=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3ODc3NTEzMzUsImlhdCI6MTc4Nzc1MTMzNSwidXNlcklkIjoiM0REMjgxQzQ2QTcyMTU2RDBBNDk1RTNDQDdlNjYxZjNiNjMxYzE2ZTk0OTVmYzcuZSIsImF1dGhJZCI6IjY5NkI4MTJBNjlFOTlCRUQwQTQ5NUZCN0BBZG9iZUlEIiwicHJpbmNpcGFsSWQiOiJ2aWpheWFrdW1hci51bm5pQGNvZ25pemFudC5jb20iLCJjbGllbnRJZCI6ImRldi1jb25zb2xlLXByb2QiLCJzb3VyY2UiOiJJbXNUb2tlbiJ9.BS1-QaJuhCrIsbcFxtNJ5VftRKyiqOx9hLMNOS2ZO8Y; Path=/; Secure; HttpOnly
+set-cookie: cq-authoring-mode=TOUCH; Path=/; Expires=Wed, 02-Sep-2026 13:35:35 GMT; Max-Age=604800
+x-frame-options: SAMEORIGIN
+x-sky-isauth: 1
+X-Content-Type-Options: nosniff
+Accept-Ranges: bytes
+Date: Wed, 26 Aug 2026 13:35:35 GMT
+Strict-Transport-Security: max-age=31557600
+set-cookie: affinity="5c6380285b2bbaaf"; Path=/; HttpOnly; secure
+X-Served-By: cache-del-vibw2260029-DEL
+X-Cache: MISS
+X-Timer: S1787751334.669234,VS0,VS0,VE2306
+transfer-encoding: chunked
+

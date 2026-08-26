@@ -1,0 +1,121 @@
+phase: release
+agent: pilot
+run_id: 2026-08-25T17-00Z-chisel-headless-integration
+status: awaiting_lead_approval
+adlc_stage: pre-sentinel
+dispatch: single-stage (PR + suspend; no RDE track requested)
+
+preconditions:
+  auditron_pass: true
+  auditron_handoff: .claude/agents/runs/2026-08-25T17-00Z-chisel-headless-integration/handoffs/auditron.yaml
+  build_hash: "79412ff (commit on release/chisel-headless-integration-2026-08-25)"
+  build_summary: "5 CF Models, 4 persisted GraphQL queries, 15 fragments, 2 DAM binaries; GraphQL multiline field fix applied but unverified in delivery (mvn ceiling closed at 3/3)"
+
+pull_request:
+  repo: vijayakumar-unni-cognizant/headless-test
+  origin_stale: false
+  head_branch: release/chisel-headless-integration-2026-08-25
+  base_branch: main
+  commits_ahead_of_base: 1
+  number: 1
+  url: https://github.com/vijayakumar-unni-cognizant/headless-test/pull/1
+  pr_tool: api
+  pr_tool_fallback_reason: null
+  title: "Add Chisel headless integration: 5 CF Models, 4 persisted GraphQL queries"
+  body_source: deploy/pr-body.md
+  body_status: committed_with_pr
+  body_note: >
+    Full PR body committed at deploy/pr-body.md. Critical finding (GraphQL multiline fix
+    unverified in delivery) prominently surfaced at top of body. Post-merge Lead checklist
+    includes CRITICAL first step: re-run all 4 queries in real env and confirm html
+    fields non-null before any other work.
+
+deliverables:
+  commit_scope_decision: |
+    Included in PR: project deliverables (5 CF Models, 4 queries, 15 fragments, 2 DAM
+    binaries, CORS config, pom.xml, ui.content filter.xml), project config, and this
+    run's ADLC audit trail (.claude/agents/runs/2026-08-25T17-00Z-chisel-headless-integration/).
+    Excluded: pre-existing agent framework (.claude/agents/*.md, references/) — these
+    are infrastructure, not deliverable. Scope decision documented in pr-request.md.
+
+  files_committed_to_branch:
+    - pom.xml (aem.port 4502 → 4506, flagged for Lead review)
+    - ui.content/src/main/content/META-INF/vault/filter.xml
+    - ui.config/src/main/content/jcr_root/apps/headless-test/osgiconfig/config.publish/...
+    - ui.content/src/main/content/jcr_root/conf/headless-test/settings/dam/cfm/models/ (5 models)
+    - ui.content/src/main/content/jcr_root/conf/headless-test/settings/graphql/ (4 queries)
+    - ui.content/src/main/content/jcr_root/content/dam/headless-test/chisel/ (15 fragments + 2 DAM binaries)
+    - .aem-skills-config.yaml
+    - .claude/agents/runs/2026-08-25T17-00Z-chisel-headless-integration/ (audit trail)
+    - .claude/agents/runs/README.md
+
+flow_control:
+  suspended: true
+  suspension_reason: "Pilot raises the release PR and returns awaiting_lead_approval. The ADLC flow pauses here for Lead's manual merge → sync to Adobe Git → real-environment deploy. Sentinel runs AFTER Lead completes these steps."
+  resume_trigger: "Lead records in DECISIONS.md: approval, real-environment Author + Publish URLs, auth method. Program Agent dispatches Sentinel."
+  resume_requires:
+    - lead_approval_recorded_in_decisions_md
+    - real_environment_author_url
+    - real_environment_publish_url
+    - real_environment_auth
+  next_stage: sentinel
+  sentinel_scope: >
+    Sentinel runs against the real-environment URLs Lead supplies. It validates UI
+    rendering, performance, accessibility, GraphQL parity, and whitespace-normalization
+    diff logs. Sentinel is the LAST stage of this run. Stand-alone FileVault install
+    path verification (mvn 4th call) is not available; Lead's manual deploy is the only
+    verification vector for install path.
+
+critical_findings_surface:
+  finding: "GraphQL multiline fields fix applied but unverified in delivery"
+  severity: MEDIUM
+  status: open
+  details: |
+    12 multiline field values (1 hero.summary, 6 pillar.description, 4 content-section.body,
+    1 landing-page.seoDescription) rewritten from child-node to plain string + <p> wrapper.
+    Verified on Author 4506 via Sling :operation=import (runtime); FileVault install
+    path unverified (mvn budget closed). CF Model field types remain multiline; schema
+    validation ruled out. Residual risk: values may still resolve to null in delivered
+    state (FileVault install differs from Sling import).
+  lead_action: >
+    CRITICAL FIRST STEP POST-DEPLOY: Re-run all 4 persisted queries in real Author +
+    Publish and confirm html fields non-null before proceeding.
+  evidence_in: deploy/pr-body.md (full details, Auditron live-test results)
+
+other_findings_non_blocking:
+  - id: AUD-CONTENT-01
+    severity: MEDIUM
+    status: open, non-blocking for PR
+    note: "sections/bolt (only carrier of home-movement.png) not wired into home.sections. Lead options: (a) wire; (b) reattach; (c) add sections-list query. Blocks TC-012/TC-016 only. Content is correct; asset dims match expectations."
+
+  - id: AUD-INFO-01
+    severity: INFO
+    status: open
+    note: "CORS allowOrigin http://localhost:3000 placeholder. Lead must update to real origin."
+
+  - id: GQL-SPEC-01
+    severity: LOW
+    status: open, awaiting Designforge
+    note: "TC-024 clause 'pillars.length >= 6' is wrong (content correct). Test case needs correction, not content change."
+
+  - id: AUD-PROC-01
+    severity: MEDIUM
+    status: documented
+    note: "Composer invoked mvn once (violating Auditron-only rule). On record in DECISIONS.md."
+
+tracks_used:
+  - raise-pr
+  # rde-deploy not requested; not included
+
+adlc_run_terminal: false
+next_actor: lead (manual merge → sync → deploy)
+notes:
+  - "Build gate pass measured PRE-FIX content state on local Author 4506. Post-fix verified via Sling import only."
+  - "Default branch is main, NOT master (verified via origin/HEAD)."
+  - "Functional test ledger: 24 executed (0 fail) / 8 deferred to Sentinel / 2 blocked (both on AUD-CONTENT-01 wiring decision, non-blocking)."
+  - "No further authorization sought. All decisions documented in DECISIONS.md."
+  - "Scope decision per Pilot contract: run deliverables only (5 CF Models + 4 queries + evidence), excluding pre-existing agent framework."
+
+report: deploy/pr-request.md
+pr_body_report: deploy/pr-body.md
+timestamp: 2026-08-26T11:45:10Z

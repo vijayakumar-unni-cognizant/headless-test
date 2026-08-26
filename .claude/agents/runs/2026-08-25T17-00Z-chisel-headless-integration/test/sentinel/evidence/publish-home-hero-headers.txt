@@ -1,0 +1,23 @@
+HTTP/1.1 200 OK
+Connection: keep-alive
+Content-Length: 802956
+Content-Type: image/png
+Content-MD5: HWwLHX26oBXZM1LBW+8nOw==
+Last-Modified: Wed, 26 Aug 2026 12:37:15 GMT
+ETag: "0x8DF036EC2659AB4"
+Content-Disposition: attachment; filename="home-hero.png"; filename*=UTF-8''home-hero.png
+x-ms-access-tier: Hot
+x-ms-access-tier-inferred: true
+Access-Control-Allow-Origin: *
+Cache-Control: public, max-age=600, immutable
+x-frame-options: SAMEORIGIN
+x-content-type-options: nosniff
+x-vhost: publish
+Accept-Ranges: bytes
+Age: 0
+Date: Wed, 26 Aug 2026 13:46:34 GMT
+Strict-Transport-Security: max-age=31557600
+X-Served-By: cache-del-vibw2260027-DEL
+X-Cache: MISS
+X-Timer: S1787751994.930954,VS0,VS0,VE259
+

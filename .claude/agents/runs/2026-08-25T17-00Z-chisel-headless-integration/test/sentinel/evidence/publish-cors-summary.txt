@@ -1,0 +1,6 @@
+Test 1: GET stats-list, no Origin header, fresh (cache-busted) -> HTTP 200, 531 bytes, full data
+Test 2: GET stats-list, Origin: https://example-consumer.test, fresh -> HTTP 204 No Content, 0 bytes, cache-control: no-cache
+Test 3: GET stats-list, Origin: http://localhost:3000 (the whitelisted placeholder), fresh -> HTTP 204 No Content, 0 bytes
+Test 4 (control, repeated x2 alternating): confirms deterministic, not flaky
+Test 5: same 204-with-Origin behavior reproduced on landing-page-by-path, pillars-list, hero-by-path
+Test 6 (cache HIT case): GET stats-list with Origin header when a cached (non-busted) copy already exists -> HTTP 200 with data served from cache, but STILL no access-control-allow-origin header in the response, for ANY origin including the whitelisted one

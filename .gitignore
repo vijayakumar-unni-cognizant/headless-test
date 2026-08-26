@@ -99,8 +99,7 @@ actions/common/
 node/
 
 # Tests
-coverage/
-reports/
 
 # Others
+.claude/agents/runs/.env
 dispatcher/src/conf.d/variables/default.vars

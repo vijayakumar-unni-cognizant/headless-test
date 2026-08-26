@@ -1,0 +1,17 @@
+HTTP/1.1 200 OK
+Connection: keep-alive
+Content-Length: 531
+cache-control: public, max-age=60, s-maxage=7200, stale-while-revalidate=86400, stale-if-error=86400
+content-type: application/json
+x-frame-options: SAMEORIGIN
+x-sky-isauth: 0
+x-vhost: publish
+X-Content-Type-Options: nosniff
+Accept-Ranges: bytes
+Date: Wed, 26 Aug 2026 13:41:53 GMT
+Age: 1191
+Strict-Transport-Security: max-age=31557600
+X-Served-By: cache-del-vibw2260027-DEL
+X-Cache: HIT
+X-Timer: S1787751713.086742,VS0,VS0,VE1
+

@@ -1,0 +1,1 @@
+{"jcr:primaryType":"dam:Asset","jcr:createdBy":"admin","jcr:created":"Wed Aug 26 2026 12:37:02 GMT+0000","jcr:content":{"jcr:primaryType":"dam:AssetContent","jcr:title":"Home Hero","contentFragment":true,"metadata":{"jcr:primaryType":"nt:unstructured"},"data":{"jcr:primaryType":"nt:unstructured","cq:model":"/conf/headless-test/settings/dam/cfm/models/hero"}}}

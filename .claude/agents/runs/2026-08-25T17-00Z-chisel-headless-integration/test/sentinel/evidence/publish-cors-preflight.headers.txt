@@ -1,0 +1,12 @@
+HTTP/1.1 204 No Content
+Connection: keep-alive
+cache-control: no-cache
+x-vhost: publish
+Accept-Ranges: bytes
+Date: Wed, 26 Aug 2026 13:41:14 GMT
+Strict-Transport-Security: max-age=31557600
+set-cookie: affinity="a486ef567e0aa0e0"; Path=/; HttpOnly; secure
+X-Served-By: cache-del-vibw2260027-DEL
+X-Cache: MISS
+X-Timer: S1787751675.868162,VS0,VS0,VE121
+
